@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
+import 'package:quickalert/quickalert.dart';
 import 'user_page.dart';
 
 class EditProfile extends StatefulWidget {
@@ -12,12 +16,12 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final TextEditingController _email = TextEditingController();
   final TextEditingController _username = TextEditingController();
-  final TextEditingController _firstname = TextEditingController();
+  final TextEditingController _firsname = TextEditingController();
   final TextEditingController _lastname = TextEditingController();
-  final TextEditingController _address = TextEditingController();
   final TextEditingController _bio = TextEditingController();
+  final TextEditingController _adress = TextEditingController();
+  final picker = ImagePicker();
   List<Map<String, dynamic>> userInfo = [];
   bool isLoading = true;
 
@@ -31,23 +35,110 @@ class _EditProfileState extends State<EditProfile> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
+        final DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
         setState(() {
           userInfo = [snapshot.data()!];
           isLoading = false;
+          // Set the text controllers after loading user information
+          _username.text = userInfo[0]['username'];
+          _firsname.text = userInfo[0]['firstname'];
+          _lastname.text = userInfo[0]['lastname'];
+          _bio.text = userInfo[0]['bio'];
+          _adress.text = userInfo[0]['address'];
         });
       } else {
-        // Handle case when user is null
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Error uploading image',
+        );
       }
     } catch (error) {
-      // Handle error
-      print("Error loading user information: $error");
+      // ignore: use_build_context_synchronously
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error uploading image: $error',
+      );
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> updateProfilePicture(context) async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.loading,
+          title: 'Loading',
+          text: 'Please wait...',
+        );
+        File file = File(pickedFile.path);
+        final firebase_storage.Reference storageRef =
+            firebase_storage.FirebaseStorage.instance.ref().child(
+                'profilePicture/${DateTime.now().millisecondsSinceEpoch}');
+        await storageRef.putFile(file);
+        final String downloadURL = await storageRef.getDownloadURL();
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({'profilePicture': downloadURL});
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditProfile()),
+        );
+      }
+    } catch (error) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error uploading image: $error',
+      );
+    }
+  }
+
+  Future<void> updateUserInfo(context) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({
+              'username': _username.text,
+              'firstName': _firsname.text,
+              'lastName': _lastname.text,
+              'bio': _bio.text,
+              'address': _adress.text,
+            });
+        await QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          title: 'Success',
+          text: 'User information updated successfully!',
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditProfile()),
+        );
+      }
+    } catch (error) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error updating user information: $error',
+      );
     }
   }
 
@@ -97,7 +188,7 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                               onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfile()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const UserPage()));
                               },
                               child: const Text(
                                 "Cancel",
@@ -126,7 +217,7 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                               onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfile()));
+                                updateUserInfo(context);
                               },
                               child: const Text(
                                 "Save",
@@ -141,7 +232,7 @@ class _EditProfileState extends State<EditProfile> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 20),
                   isLoading
                       ? const CircularProgressIndicator()
                       : CircleAvatar(
@@ -157,8 +248,8 @@ class _EditProfileState extends State<EditProfile> {
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(
                         Size(
-                          MediaQuery.of(context).size.width * 0.40,
-                          MediaQuery.of(context).size.height * 0.04,
+                          MediaQuery.of(context).size.width * 0.35,
+                          MediaQuery.of(context).size.height * 0.05,
                         ),
                       ),
                       backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
@@ -170,98 +261,87 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfile()));
-                    },
-                    child: const Text(
-                      "Change Picture",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                      updateProfilePicture(context);
+                    }, 
+                    child: const Text('Change Picture'),
                   ),
                   const SizedBox(height: 20),
                 ],
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 100, left: 30, right: 30),
+              margin: const EdgeInsets.all(20),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
                 controller: _username,
                 decoration: InputDecoration(
-                  labelText: userInfo[0]['username'],
+                  labelText: "Username",
                   labelStyle: const TextStyle(
                     color: Color(0xFF415B5B),
                   ),  
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF415B5B)))),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF415B5B)))),
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 100, left: 30, right: 30),
+              margin: const EdgeInsets.all(20),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: _firstname,
+                controller: _firsname,
                 decoration: InputDecoration(
-                  labelText: userInfo[0]['firstname'],
+                  labelText: "First name",
                   labelStyle: const TextStyle(
                     color: Color(0xFF415B5B),
                   ),  
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF415B5B)))),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF415B5B)))),
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 100, left: 30, right: 30),
+              margin: const EdgeInsets.all(20),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
                 controller: _lastname,
                 decoration: InputDecoration(
-                  labelText: userInfo[0]['lastname'],
+                  labelText: "Last name",
                   labelStyle: const TextStyle(
                     color: Color(0xFF415B5B),
                   ),  
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF415B5B)))),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF415B5B)))),
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 100, left: 30, right: 30),
+              margin: const EdgeInsets.all(20),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: _email,
+                controller: _bio,
                 decoration: InputDecoration(
-                  labelText: userInfo[0]['bio'],
+                  labelText: "Bio",
                   labelStyle: const TextStyle(
                     color: Color(0xFF415B5B),
                   ),  
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF415B5B)))),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF415B5B)))),
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 100, left: 30, right: 30),
+              margin: const EdgeInsets.all(20),
               child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: _email,
+                controller: _adress,
                 decoration: InputDecoration(
-                  labelText: userInfo[0]['email'],
+                  labelText: "Adress",
                   labelStyle: const TextStyle(
                     color: Color(0xFF415B5B),
                   ),  
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF415B5B)))),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF415B5B)))),
               ),
             ),
           ],

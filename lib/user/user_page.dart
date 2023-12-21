@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:selaa/user/add_poste.dart';
 import 'package:selaa/user/edit_profile.dart';
 import 'package:selaa/user/home.dart';
 
@@ -168,7 +169,9 @@ class _UserPage extends State<UserPage> {
                         ),
                       ),
                     ),
-                    onPressed: (){}, 
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPoste()));
+                    }, 
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -213,5 +216,4 @@ class _UserPage extends State<UserPage> {
       ),
     );
   }
-
 }

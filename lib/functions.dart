@@ -190,3 +190,8 @@ Future<void> signOut(context) async {
     );
   }
 }
+
+// Function to update user profile
+Future <void> updateUserInfo(context) async {
+
+}
