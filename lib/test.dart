@@ -1,81 +1,147 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:io';
 
-class ImageUploadWidget extends StatefulWidget {
-  const ImageUploadWidget({super.key});
+class Test extends StatefulWidget {
+  const Test({Key? key}) : super(key: key);
 
   @override
-  _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
+  State<Test> createState() => _TestState();
 }
 
-class _ImageUploadWidgetState extends State<ImageUploadWidget> {
-  File? _imageFile;
-  final picker = ImagePicker();
+class _TestState extends State<Test> {
+  final List<XFile> _imageFileList = [];
 
-  Future<void> _pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+  void selectImages() async {
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFileList.add(pickedFile);
+      });
+    }
   }
 
-  Future<void> _uploadImage() async {
-    if (_imageFile == null) {
-      print('No image selected.');
-      return;
-    }
-
-    try {
-      final firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance.ref().child('profilePicture/${DateTime.now().millisecondsSinceEpoch}.png');
-
-      await storageRef.putFile(_imageFile!);
-
-      print('Image uploaded successfully.');
-    } catch (e) {
-      print('Error uploading image: $e');
-    }
+  void deleteImage(int index) {
+    setState(() {
+      _imageFileList.removeAt(index);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Upload'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _imageFile != null
-              ? Image.file(
-                  _imageFile!,
-                  height: 200,
-                )
-              : Container(),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _pickImage,
-            child: Text('Pick Image'),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _uploadImage,
-            child: Text('Upload Image'),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.50,
+                  alignment: Alignment.topLeft,
+                  margin: const EdgeInsets.only(top: 50, left: 30),
+                  child: IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+                    onPressed: () {},
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 50),
+                  width: MediaQuery.of(context).size.width * 0.32,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all(
+                        Size(
+                          MediaQuery.of(context).size.width * 0.25,
+                          MediaQuery.of(context).size.height * 0.04,
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: const BorderSide(color: Color(0xFF415B5B)),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Text(
+                      "Publish",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: (){
+                selectImages();
+              }, 
+              child: const Icon(Icons.add_a_photo)
+            ),
+            Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(_imageFileList.length, (index) {
+                    return Container(
+                      margin: const EdgeInsets.all(10),
+                      child: Stack(
+                        children: [
+                          Image.file(
+                            File(_imageFileList[index].path),
+                            width: 200,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Delete Image?'),
+                                      content: const Text('Are you sure you want to delete this image?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            deleteImage(index);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Delete'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
+            
+          ],
+        ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: ImageUploadWidget(),
-  ));
 }

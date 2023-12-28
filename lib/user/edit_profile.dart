@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 import 'user_page.dart';
+import '../functions.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -40,7 +41,6 @@ class _EditProfileState extends State<EditProfile> {
         setState(() {
           userInfo = [snapshot.data()!];
           isLoading = false;
-          // Set the text controllers after loading user information
           _username.text = userInfo[0]['username'];
           _firsname.text = userInfo[0]['firstname'];
           _lastname.text = userInfo[0]['lastname'];
@@ -107,41 +107,6 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<void> updateUserInfo(context) async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({
-              'username': _username.text,
-              'firstName': _firsname.text,
-              'lastName': _lastname.text,
-              'bio': _bio.text,
-              'address': _adress.text,
-            });
-        await QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          title: 'Success',
-          text: 'User information updated successfully!',
-        );
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const EditProfile()),
-        );
-      }
-    } catch (error) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Error',
-        text: 'Error updating user information: $error',
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,7 +128,7 @@ class _EditProfileState extends State<EditProfile> {
                         child: IconButton(
                           icon: const FaIcon(FontAwesomeIcons.arrowLeft),
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const UserPage()));
+                            Navigator.pop(context);
                           },
                         ),
                       ),
@@ -217,7 +182,14 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                               onPressed: (){
-                                updateUserInfo(context);
+                                updateUserInfo(
+                                  context,
+                                  _username.text,
+                                  _firsname.text,
+                                  _lastname.text,
+                                  _bio.text,
+                                  _adress.text
+                                );
                               },
                               child: const Text(
                                 "Save",

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:selaa/user/add_poste.dart';
 import 'package:selaa/user/edit_profile.dart';
-import 'package:selaa/user/home.dart';
+import 'package:selaa/user/product_page.dart';
+import '../functions.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -15,26 +14,21 @@ class UserPage extends StatefulWidget {
 
 class _UserPage extends State<UserPage> {
   List<Map<String, dynamic>> userInfo = [];
-
-  Future<void> loadUserInfo() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      setState(() {
-        userInfo = [snapshot.data()!];
-      });
-    } else {
-      // Handle case when user is null
-    }
-  }
+  List<Map<String, dynamic>> userPostes = [];
 
   @override
   void initState() {
     super.initState();
-    loadUserInfo();
+    loadUserInfo().then((List<Map<String, dynamic>> user) {
+      setState(() {
+        userInfo = user;
+      });
+    });
+    loadUserPostes().then((List<Map<String, dynamic>> postes) {
+      setState(() {
+        userPostes = postes;
+      });
+    });
   }
 
   @override
@@ -55,7 +49,7 @@ class _UserPage extends State<UserPage> {
                     child: IconButton(
                       icon: const FaIcon(FontAwesomeIcons.arrowLeft),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+                        Navigator.pop(context);
                       },
                     ),
                   ),
@@ -210,7 +204,91 @@ class _UserPage extends State<UserPage> {
                   )
                 ],
               ),
-            )
+            ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (userPostes.isNotEmpty)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: userPostes.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(productID: userPostes[index]['productID'])));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(20),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFCCE6E6),
+                              borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                            ),
+                            width: MediaQuery.of(context).size.width*0.8,
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(45.0),
+                                    topRight: Radius.circular(45.0),
+                                  ),
+                                  child: Image.network(
+                                    userPostes[index]['imageUrls'][0],
+                                    height: MediaQuery.of(context).size.height * 0.3,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  userPostes[index]['title'],
+                                  textAlign: TextAlign.left,                                
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Text(
+                                      userPostes[index]['category'],
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      userPostes[index]['type'],
+                                      textAlign: TextAlign.left,                                    
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  userPostes[index]['price'],
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        );
+                      },
+                    ),
+                  if (userPostes.isEmpty)
+                    const Text('No posts available.'),
+                ],
+              ),
+            ),
           ],
         ),
       ),
