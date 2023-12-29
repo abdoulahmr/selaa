@@ -12,6 +12,12 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  Color latestButtonColor = const Color(0xFF008080);
+  Color onProcessingButtonColor = const Color(0xFFF2F4F4);
+  Color finishedOrderButtonColor = const Color(0xFFF2F4F4);
+  Color latestButtonTextColor = Colors.white;
+  Color onProcessingButtonTextColor = const Color(0xFF415B5B);
+  Color finishedOrderButtonTextColor = const Color(0xFF415B5B);
   int _currentIndex = 0;
   final List<Widget> _pages = [
     const Home(),
@@ -65,16 +71,29 @@ class _OrderPageState extends State<OrderPage> {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _currentIndex = 0;
+                          latestButtonColor = const Color(0xFF008080);
+                          onProcessingButtonColor = const Color(0xFFF2F4F4);
+                          finishedOrderButtonColor = const Color(0xFFF2F4F4);
+                          latestButtonTextColor = Colors.white;
+                          onProcessingButtonTextColor = const Color(0xFF415B5B);
+                          finishedOrderButtonTextColor = const Color(0xFF415B5B);
+                        });
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF008080),
+                        backgroundColor: latestButtonColor,
                         fixedSize: const Size.fromHeight(60),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: const BorderSide(color: Color(0xFF415B5B)),
                         ),
                       ),
-                      child: const Text("Latest"),
+                      child: Text(
+                        "Latest",
+                        style: TextStyle(color: latestButtonTextColor),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -83,18 +102,28 @@ class _OrderPageState extends State<OrderPage> {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _currentIndex = 1;
+                          latestButtonColor = const Color(0xFFF2F4F4);
+                          onProcessingButtonColor = const Color(0xFF008080);
+                          finishedOrderButtonColor = const Color(0xFFF2F4F4);
+                          latestButtonTextColor = const Color(0xFF415B5B);
+                          onProcessingButtonTextColor = Colors.white;
+                          finishedOrderButtonTextColor = const Color(0xFF415B5B);
+                        });
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF2F4F4),
+                        backgroundColor: onProcessingButtonColor,
                         fixedSize: const Size.fromHeight(60),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: const BorderSide(color: Color(0xFF415B5B)),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "On Processing",
-                        style: TextStyle(color: Color(0xFF415B5B)),
+                        style: TextStyle(color: onProcessingButtonTextColor),
                       ),
                     ),
                   ),
@@ -104,19 +133,29 @@ class _OrderPageState extends State<OrderPage> {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _currentIndex = 2;
+                          latestButtonColor = const Color(0xFFF2F4F4);
+                          onProcessingButtonColor = const Color(0xFFF2F4F4);
+                          finishedOrderButtonColor = const Color(0xFF008080);
+                          latestButtonTextColor = const Color(0xFF415B5B);
+                          onProcessingButtonTextColor = const Color(0xFF415B5B);
+                          finishedOrderButtonTextColor = Colors.white;
+                        });
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF2F4F4),
+                        backgroundColor: finishedOrderButtonColor,
                         fixedSize: const Size.fromHeight(60),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: const BorderSide(color: Color(0xFF415B5B)),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Finished Order",
-                        style: TextStyle(color: Color(0xFF415B5B)),
-                        ),
+                        style: TextStyle(color: finishedOrderButtonTextColor),
+                      ),
                     ),
                   ),
                 ],
