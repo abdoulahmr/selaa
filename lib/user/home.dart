@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:selaa/user/notification.dart';
+import 'package:selaa/user/order.dart';
 import 'package:selaa/user/user_page.dart';
 import 'options_menu.dart';
 
@@ -12,15 +14,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String profilePicture = ''; 
+  String profilePicture = '';
+  int _currentIndex = 0;
+  final List<Widget> _pages = [
+    const Home(),
+    const UserPage(),
+    const NotificationPage(),
+    const OrderPage(),
+  ];
 
   Future<void> loadProfilePicture() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
+          .collection('users')
+          .doc(user.uid)
+          .get();
       if (snapshot.exists) {
         final data = snapshot.data();
         setState(() {
@@ -35,7 +44,7 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     loadProfilePicture();
   }
@@ -111,9 +120,59 @@ class _HomeState extends State<Home> {
                   "ADS SPACE",
                   textAlign: TextAlign.center,
                 ),
-              )
+              ),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: const Color(0xFFCCE6E6),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: const Color(0xFF008080),
+          unselectedItemColor: const Color(0xFF008080),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => _pages[index]),
+            );
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 35,
+              ),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_circle,
+                size: 35,
+              ),
+              label: "Profile",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.notifications_active,
+                size: 35,
+              ),
+              label: "Notification",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.sort,
+                size: 35,
+              ),
+              label: "Order",
+            ),
+          ],
         ),
       ),
     );

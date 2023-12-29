@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:selaa/user/add_poste.dart';
 import 'package:selaa/user/edit_profile.dart';
+import 'package:selaa/user/home.dart';
+import 'package:selaa/user/notification.dart';
+import 'package:selaa/user/order.dart';
 import 'package:selaa/user/product_page.dart';
 import '../functions.dart';
 
@@ -15,6 +18,13 @@ class UserPage extends StatefulWidget {
 class _UserPage extends State<UserPage> {
   List<Map<String, dynamic>> userInfo = [];
   List<Map<String, dynamic>> userPostes = [];
+  int _currentIndex = 0;
+  final List<Widget> _pages = [
+    const Home(),
+    const UserPage(),
+    const NotificationPage(),
+    const OrderPage(),
+  ];
 
   @override
   void initState() {
@@ -288,6 +298,56 @@ class _UserPage extends State<UserPage> {
                     const Text('No posts available.'),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: const Color(0xFFCCE6E6),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: const Color(0xFF008080),
+          unselectedItemColor: const Color(0xFF008080),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => _pages[index]),
+            );
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 35,
+              ),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_circle,
+                size: 35,
+              ),
+              label: "Profile",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.notifications_active,
+                size: 35,
+              ),
+              label: "Notification",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.sort,
+                size: 35,
+              ),
+              label: "Order",
             ),
           ],
         ),

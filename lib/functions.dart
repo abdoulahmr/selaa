@@ -96,6 +96,12 @@ Future<User?> loginWithEmailPassword(
   context,
 ) async {
   try {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.loading,
+      title: 'Loading',
+      text: 'Please wait...',
+    );
     // Sign in with email and password
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -336,12 +342,10 @@ Future<List<Map<String, dynamic>>> loadUserInfo() async {
       }
     } catch (error) {
       // Handle errors
-      print("Error loading user information: $error");
       return [];
     }
   } else {
     // Handle case when user is null
-    print("User is null");
     return [];
   }
 }
@@ -364,11 +368,9 @@ Future<List<Map<String, dynamic>>> loadUserPostes() async {
       userPostes = querySnapshot.docs.map((doc) => doc.data()).toList();
     } catch (error) {
       // Handle any errors that may occur during the process
-      print('Error loading user postes: $error');
     }
   } else {
     // Handle case when user is null
-    print('User is null');
   }
 
   return userPostes;
@@ -376,8 +378,6 @@ Future<List<Map<String, dynamic>>> loadUserPostes() async {
 
 // load poste information
 Future<List<Map<String, dynamic>>> loadPosteInfo(String productID) async {
-  List<Map<String, dynamic>> posteInfo = [];
-
   try {
     // Fetch poste data from Firestore
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
@@ -395,7 +395,6 @@ Future<List<Map<String, dynamic>>> loadPosteInfo(String productID) async {
     }
   } catch (error) {
     // Handle errors
-    print("Error loading poste information: $error");
     return [];
   }
 }
