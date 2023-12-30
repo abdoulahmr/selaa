@@ -63,6 +63,7 @@ class Login extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 20, left: 30, right: 30),
                   child: TextFormField(
                     controller: _password,
+                    obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Enter your password',
                       labelStyle: const TextStyle(

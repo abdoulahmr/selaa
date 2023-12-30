@@ -84,7 +84,7 @@ Future<User?> registerWithEmailPassword({
       context: context,
       type: QuickAlertType.error,
       title: 'Error',
-      text: e.toString(),
+      text: 'Error creating account please send us a feedback',
     );
   }
   return null;
@@ -143,7 +143,7 @@ Future<User?> loginWithEmailPassword(
         context: context,
         type: QuickAlertType.error,
         title: 'Error',
-        text: 'FirebaseAuthException: ${e.code}',
+        text: 'Error logging in please send us a feedback',
       );
     }
   } catch (e) {
@@ -152,7 +152,7 @@ Future<User?> loginWithEmailPassword(
       context: context,
       type: QuickAlertType.error,
       title: 'Error',
-      text: e.toString(),
+      text: 'Error logging in please send us a feedback',
     );
   }
   return null;
@@ -180,7 +180,7 @@ Future<void> resetPassword(String email, context) async {
       context: context,
       type: QuickAlertType.success,
       title: 'Error',
-      text: 'Error sending password reset email: $e',
+      text: 'Error sending password reset email please send us a feedback',
     );
   }
 }
@@ -198,7 +198,7 @@ Future<void> signOut(context) async {
       context: context,
       type: QuickAlertType.error,
       title: 'Error',
-      text: e.toString(),
+      text: 'Error signing out please send us a feedback',
     );
   }
 }
@@ -325,7 +325,7 @@ Future<void> addPost(
 }
 
 // load user information
-Future<List<Map<String, dynamic>>> loadUserInfo() async {
+Future<List<Map<String, dynamic>>> loadUserInfo(context) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user != null) {
     try {
@@ -339,20 +339,38 @@ Future<List<Map<String, dynamic>>> loadUserInfo() async {
         return [documentSnapshot.data()!];
       } else {
         // Handle case when document does not exist
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Error loading user information please send us a feedback',
+        );
         return [];
       }
     } catch (error) {
       // Handle errors
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error loading user information please send us a feedback',
+      );
       return [];
     }
   } else {
     // Handle case when user is null
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'User is not authenticated.',
+    );
     return [];
   }
 }
 
 // load seller information
-Future<List<Map<String, dynamic>>> loadSellerInfo(uid) async {
+Future<List<Map<String, dynamic>>> loadSellerInfo(uid,context) async {
   try {
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
       .collection('users')
@@ -363,16 +381,28 @@ Future<List<Map<String, dynamic>>> loadSellerInfo(uid) async {
       return [documentSnapshot.data()!];
     } else {
       // Handle case when document does not exist
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error loading seller information please send us a feedback',
+      );
       return [];
     }
   } catch (error) {
     // Handle errors
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Error loading seller information please send us a feedback',
+    );
     return [];
   }
 }
 
 // Load user postes
-Future<List<Map<String, dynamic>>> loadUserPostes() async {
+Future<List<Map<String, dynamic>>> loadUserPostes(context) async {
   User? user = FirebaseAuth.instance.currentUser;
   List<Map<String, dynamic>> userPostes = [];
 
@@ -384,21 +414,32 @@ Future<List<Map<String, dynamic>>> loadUserPostes() async {
               .collection('postes')
               .where('userId', isEqualTo: user.uid)
               .get();
-
       // Extract the data from the documents in the query snapshot
       userPostes = querySnapshot.docs.map((doc) => doc.data()).toList();
     } catch (error) {
       // Handle any errors that may occur during the process
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error loading postes please send us a feedback',
+      );
+      return [];
     }
   } else {
     // Handle case when user is null
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'User is not authenticated.',
+    );
   }
-
   return userPostes;
 }
 
 // load poste information
-Future<List<Map<String, dynamic>>> loadPosteInfo(String productID) async {
+Future<List<Map<String, dynamic>>> loadPosteInfo(String productID, context) async {
   try {
     // Fetch poste data from Firestore
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
@@ -412,16 +453,28 @@ Future<List<Map<String, dynamic>>> loadPosteInfo(String productID) async {
       return [documentSnapshot.data()!];
     } else {
       // Handle case when document does not exist
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error loading post please send us a feedback',
+      );
       return [];
     }
   } catch (error) {
     // Handle errors
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Error loading post please send us a feedback',
+    );
     return [];
   }
 }
 
 // Load all postes
-Future<List<Map<String, dynamic>>> loadAllPostes() async {
+Future<List<Map<String, dynamic>>> loadAllPostes(context) async {
   try {
     // Fetch poste data from Firestore
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -431,7 +484,12 @@ Future<List<Map<String, dynamic>>> loadAllPostes() async {
     return querySnapshot.docs.map((doc) => doc.data()).toList();
   } catch (error) {
     // Handle errors
-    print('Error loading postes: $error');
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Error loading postes please send us a feedback',
+    );
     return [];
   }
 }
@@ -474,67 +532,137 @@ Future<void> deletePoste(String productID, context) async {
       context: context,
       type: QuickAlertType.error,
       title: 'Error',
-      text: 'Error deleting post: $error',
+      text: 'Error deleting post please send us a feedback',
     );
   }
 }
 
 // add to cart
-Future<void> addItemToCart(String sellerID,String productID,int quantityValue ,String price,context) async {
+Future<void> addItemToCart(String sellerID, String productID, int quantityValue, String price, context) async {
   User? user = FirebaseAuth.instance.currentUser;
   int totalPrice = int.parse(price) * quantityValue;
-  if (user != null){
+  if (user != null) {
     try {
-      await FirebaseFirestore.instance.collection('cart').doc().set({
-        'sellerID':sellerID,
-        'buyerID':user.uid,
-        'productID':productID,
-        'quantity':quantityValue,
-        'totalPrice': totalPrice,
-      });
+      // Check if the product already exists in the user's cart
+      QuerySnapshot<Map<String, dynamic>> existingProductsSnapshot =
+          await FirebaseFirestore.instance
+              .collection('cart')
+              .where('buyerID', isEqualTo: user.uid)
+              .where('productID', isEqualTo: productID)
+              .get();
+      List<DocumentSnapshot<Map<String, dynamic>>> existingProducts = existingProductsSnapshot.docs;
+      if (existingProducts.isNotEmpty) {
+        // If the product exists, update the quantity
+        await FirebaseFirestore.instance
+            .collection('cart')
+            .doc(existingProducts[0].id)
+            .update({
+          'quantity': existingProducts[0]['quantity'] + quantityValue,
+          'totalPrice': totalPrice + (existingProducts[0]['quantity'] * int.parse(price)),
+        });
+      } else {
+        // If the product does not exist, add a new item
+        await FirebaseFirestore.instance.collection('cart').doc().set({
+          'sellerID': sellerID,
+          'buyerID': user.uid,
+          'productID': productID,
+          'quantity': quantityValue,
+          'totalPrice': totalPrice,
+        });
+      }
       Navigator.pop(context);
-    }catch (error) {
+    } catch (error) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
         title: 'Error',
-        text: 'Error adding post: $error',
+        text: 'Error adding to cart please send us a feedback',
       );
     }
   }
 }
 
+
 // get items from cart
-Future<List<Map<String, dynamic>>> loadCartItems() async{
+Future<List<Map<String, dynamic>>> loadCartItems(context) async {
   User? user = FirebaseAuth.instance.currentUser;
   List<Map<String, dynamic>> userCart = [];
-
   if (user != null) {
     try {
-      // Fetch user posts from Firestore
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await FirebaseFirestore.instance
-          .collection('cart')
-          .where('buyerID', isEqualTo: user.uid)
-          .get();
-
-      // Extract the data from the documents in the query snapshot
-      userCart = querySnapshot.docs.map((doc) => doc.data()).toList();
+      // Fetch user cart items from Firestore
+      QuerySnapshot<Map<String, dynamic>> cartSnapshot =
+          await FirebaseFirestore.instance
+              .collection('cart')
+              .where('buyerID', isEqualTo: user.uid)
+              .get();
+      List<Map<String, dynamic>> cartItems =
+          cartSnapshot.docs.map((doc) => doc.data()).toList();
+      // Fetch products with the same productID from the postes collection
+      List productIDs =
+          cartItems.map((item) => item['productID']).toList();
+      QuerySnapshot<Map<String, dynamic>> productsSnapshot =
+          await FirebaseFirestore.instance
+              .collection('postes')
+              .where('productID', whereIn: productIDs)
+              .get();
+      // Extract the data from the documents in the products snapshot
+      userCart = productsSnapshot.docs.map((doc) {
+        if (doc.exists) {
+          // Find the corresponding cart item for the product
+          Map<String, dynamic>? cartItem = cartItems.firstWhere(
+            (item) => item['productID'] == doc.id,
+            orElse: () => {},
+          );
+          if (cartItem.isNotEmpty) {
+            // Include both product details and quantity
+            return {
+              'productDetails': doc.data(),
+              'quantity': cartItem['quantity'],
+            };
+          } else {
+            QuickAlert.show(
+              context: context,
+              type: QuickAlertType.error,
+              title: 'Error',
+              text: 'Error loading cart items please send us a feedback',
+            );
+            return null;
+          }
+        } else {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            title: 'Error',
+            text: 'Error loading cart items please send us a feedback',
+          );
+          return null;
+        }
+      }).where((item) => item != null).toList().cast<Map<String, dynamic>>();
     } catch (error) {
       // Handle any errors that may occur during the process
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error loading cart items please send us a feedback',
+      );
     }
   } else {
     // Handle case when user is null
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'User is not authenticated.',
+    );
   }
-
   return userCart;
 }
 
 // calculate total price
-Future<int> calculateTotalPrice() async {
+Future<int> calculateTotalPrice(context) async {
   User? user = FirebaseAuth.instance.currentUser;
   int total = 0;
-
   if (user != null) {
     try {
       // Fetch user cart items from Firestore
@@ -543,11 +671,9 @@ Future<int> calculateTotalPrice() async {
               .collection('cart')
               .where('buyerID', isEqualTo: user.uid)
               .get();
-
       // Extract the data from the documents in the query snapshot
       List<Map<String, dynamic>> userCart =
           querySnapshot.docs.map((doc) => doc.data()).toList();
-
       // Calculate the total price
       for (int i = 0; i < userCart.length; i++) {
         // Ensure that the 'totalPrice' field is present and non-null
@@ -557,11 +683,86 @@ Future<int> calculateTotalPrice() async {
       }
     } catch (error) {
       // Handle any errors that may occur during the process
-      print('Error calculating total price: $error');
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error calculating total price please send us a feedback',
+      );
     }
   } else {
     // Handle case when the user is null
-    print('User is null');
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'User is not authenticated.',
+    );
   }
   return total;
+}
+
+// Function to delete item from cart
+Future<void> deleteItemFromCart(String productID, context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  try {
+    // Fetch items to delete from Firestore
+    QuerySnapshot<Map<String, dynamic>> itemsToDeleteSnapshot = await FirebaseFirestore.instance
+        .collection('cart')
+        .where('productID', isEqualTo: productID)
+        .where('buyerID', isEqualTo: user!.uid)
+        .get();
+    // Iterate through the documents and delete each one
+    for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot in itemsToDeleteSnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
+  } catch (error) {
+    // Handle errors
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Error deleting item from cart please send us a feedback',
+    );
+  }
+}
+
+// Function to update user email
+Future <void> updateEmail(String _password, String _email,context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  AuthCredential credential = EmailAuthProvider.credential(email: user!.email!, password: _password);
+  try {
+    await user.reauthenticateWithCredential(credential);
+  } catch (e) {
+    // Handle reauthentication failure
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Reauthentication failed please send us a feedback',
+    );
+    print(1);
+    print(e);
+  }
+  // Update email address
+  try {
+    await user.updateEmail(_email);
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: 'Success',
+      text: 'Email updated successfully! Please login again.',
+    );
+    signOut(context);
+  } catch (e) {
+    // Handle email update failure
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Email update failed please send us a feedback',
+    );
+    print(2);
+    print(e);
+  }
 }

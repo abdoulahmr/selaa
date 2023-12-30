@@ -139,6 +139,7 @@ class SignUp extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
                   child: TextFormField(
                     controller: _password,
+                    obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: const TextStyle(
@@ -155,6 +156,7 @@ class SignUp extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 5, left: 30, right: 30),
                   child: TextFormField(
                     controller: _confirmPassword,
+                    obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
                       labelStyle: const TextStyle(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/user/home.dart';
+import 'package:selaa/user/settings_list.dart';
+import 'package:selaa/user/user_page.dart';
 import '../functions.dart';
 
 class OptionsMenu extends StatelessWidget {
@@ -12,7 +14,8 @@ class OptionsMenu extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              height: 100,
+              margin: const EdgeInsets.only(top: 50),
+              height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {
                   Navigator.push(
@@ -27,9 +30,9 @@ class OptionsMenu extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(width: 40),
                     Icon(
-                      Icons.home,
+                      Icons.home_outlined,
                       size: 40,
-                      color: Color(0xFF4586FF),
+                      color: Color(0xFF008080),
                     ),
                     SizedBox(width: 40),
                     Text(
@@ -41,10 +44,15 @@ class OptionsMenu extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 50),
-              height: 100,
+              margin: const EdgeInsets.only(top: 30),
+              height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Colors.white),
                 ),
@@ -54,7 +62,7 @@ class OptionsMenu extends StatelessWidget {
                     Icon(
                       Icons.account_circle_outlined,
                       size: 40,
-                      color: Color(0xFF4586FF),
+                      color: Color(0xFF008080),
                     ),
                     SizedBox(width: 40),
                     Text(
@@ -66,7 +74,177 @@ class OptionsMenu extends StatelessWidget {
               ),
             ),
             Container(
-              height: 100,
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsList()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                ),
+                child: const Row(
+                  children: <Widget>[
+                    SizedBox(width: 40),
+                    Icon(
+                      Icons.account_balance_wallet_outlined,
+                      size: 40,
+                      color: Color(0xFF008080),
+                    ),
+                    SizedBox(width: 40),
+                    Text(
+                      "Balance",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsList()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                ),
+                child: const Row(
+                  children: <Widget>[
+                    SizedBox(width: 40),
+                    Icon(
+                      Icons.settings_outlined,
+                      size: 40,
+                      color: Color(0xFF008080),
+                    ),
+                    SizedBox(width: 40),
+                    Text(
+                      "Settings",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                ),
+                child: const Row(
+                  children: <Widget>[
+                    SizedBox(width: 40),
+                    Icon(
+                      Icons.notifications_outlined,
+                      size: 40,
+                      color: Color(0xFF008080),
+                    ),
+                    SizedBox(width: 40),
+                    Text(
+                      "Notifications",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                ),
+                child: const Row(
+                  children: <Widget>[
+                    SizedBox(width: 40),
+                    Icon(
+                      Icons.delivery_dining_outlined,
+                      size: 40,
+                      color: Color(0xFF008080),
+                    ),
+                    SizedBox(width: 40),
+                    Text(
+                      "Delivery",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                ),
+                child: const Row(
+                  children: <Widget>[
+                    SizedBox(width: 40),
+                    Icon(
+                      Icons.shopping_cart_outlined,
+                      size: 40,
+                      color: Color(0xFF008080),
+                    ),
+                    SizedBox(width: 40),
+                    Text(
+                      "Order",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 50),
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: OutlinedButton(
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                ),
+                child: const Row(
+                  children: <Widget>[
+                    SizedBox(width: 40),
+                    Icon(
+                      Icons.language_outlined,
+                      size: 40,
+                      color: Color(0xFF008080),
+                    ),
+                    SizedBox(width: 40),
+                    Text(
+                      "Language",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
@@ -78,7 +256,7 @@ class OptionsMenu extends StatelessWidget {
                     Icon(
                       Icons.bug_report_outlined,
                       size: 40,
-                      color: Color(0xFF4586FF),
+                      color: Color(0xFF008080),
                     ),
                     SizedBox(width: 40),
                     Text(
@@ -90,7 +268,7 @@ class OptionsMenu extends StatelessWidget {
               ),
             ),
             Container(
-              height: 100,
+              height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
@@ -102,7 +280,7 @@ class OptionsMenu extends StatelessWidget {
                     Icon(
                       Icons.info_outline,
                       size: 40,
-                      color: Color(0xFF4586FF),
+                      color: Color(0xFF008080),
                     ),
                     SizedBox(width: 40),
                     Text(
@@ -114,57 +292,8 @@ class OptionsMenu extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 50),
-              height: 100,
-              child: OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.white),
-                ),
-                child: const Row(
-                  children: <Widget>[
-                    SizedBox(width: 40),
-                    Icon(
-                      Icons.admin_panel_settings_outlined,
-                      size: 40,
-                      color: Color(0xFF4586FF),
-                    ),
-                    SizedBox(width: 40),
-                    Text(
-                      "Privacy Policy",
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: 100,
-              child: OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.white),
-                ),
-                child: const Row(
-                  children: <Widget>[
-                    SizedBox(width: 40),
-                    Icon(
-                      Icons.article_outlined,
-                      size: 40,
-                      color: Color(0xFF4586FF),
-                    ),
-                    SizedBox(width: 40),
-                    Text(
-                      "Terms & Conditions",
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
               margin: const EdgeInsets.only(top: 50, bottom: 20),
-              height: 100,
+              height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {
                   signOut(context);

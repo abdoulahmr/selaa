@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:selaa/functions.dart';
 import 'package:selaa/user/home.dart';
 import 'package:selaa/user/notification.dart';
+import 'package:selaa/user/product_page.dart';
 import 'package:selaa/user/user_page.dart';
 
 class ShoppingCart extends StatefulWidget {
@@ -28,12 +26,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
   @override
   void initState() {
     super.initState();
-    loadCartItems().then((List<Map<String, dynamic>> items) {
+    loadCartItems(context).then((List<Map<String, dynamic>> items) {
       setState(() {
         shoppingCart = items;
       });
     });
-    calculateTotalPrice().then((int price) {
+    calculateTotalPrice(context).then((int price) {
       setState(() {
         totalPrice = price;
       });
@@ -47,17 +45,125 @@ class _ShoppingCartState extends State<ShoppingCart> {
         child: Column(
           children: [
             Container(
-                margin: const EdgeInsets.only(top: 50),
-                child: const Text(
-                  "Shopping Cart",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.15,
+              margin: const EdgeInsets.all(30),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 240, 239, 239),
+                borderRadius: BorderRadius.all(Radius.circular(30))
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "Total : \$${totalPrice.toString()}",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all(
+                        Size(
+                          MediaQuery.of(context).size.width * 0.4,
+                          MediaQuery.of(context).size.height * 0.06,
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: const BorderSide(color: Color(0xFF415B5B)),
+                        ),
+                      ),
+                    ),
+                    child: const Text('Confirm Order'),
+                    onPressed: () {
+                    }
+                  ),
+                ],
+              ),
             ),
             Container(
-              
+              child: ListView.builder(
+                itemCount: shoppingCart.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductPage(productID: shoppingCart[index]['productDetails']['productID']),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 230, 230, 230),
+                        borderRadius: const BorderRadius.all(Radius.circular(30)),
+                      ),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                            child: Image.network(
+                              shoppingCart[index]['productDetails']['imageUrls'][0],
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Text(
+                              shoppingCart[index]['productDetails']["title"],
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.1,
+                            child: Text(
+                              shoppingCart[index]['quantity'].toString(),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (index < shoppingCart.length) {
+                                deleteItemFromCart(shoppingCart[index]['productDetails']['productID'],context);
+                                setState(() {
+                                  shoppingCart.removeAt(index);
+                                  calculateTotalPrice(context).then((int price) {
+                                    setState(() {
+                                      totalPrice = price;
+                                    });
+                                  });
+                                });
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             )
           ],
         ),

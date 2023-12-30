@@ -29,12 +29,12 @@ class _UserPage extends State<UserPage> {
   @override
   void initState() {
     super.initState();
-    loadUserInfo().then((List<Map<String, dynamic>> user) {
+    loadUserInfo(context).then((List<Map<String, dynamic>> user) {
       setState(() {
         userInfo = user;
       });
     });
-    loadUserPostes().then((List<Map<String, dynamic>> postes) {
+    loadUserPostes(context).then((List<Map<String, dynamic>> postes) {
       setState(() {
         userPostes = postes;
       });

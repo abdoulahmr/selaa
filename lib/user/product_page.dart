@@ -42,7 +42,7 @@ class _ProductPageState extends State<ProductPage> {
  @override
   void initState() {
     super.initState();
-    loadPosteInfo(widget.productID).then((List<Map<String, dynamic>> poste) {
+    loadPosteInfo(widget.productID,context).then((List<Map<String, dynamic>> poste) {
       setState(() {
         posteInfo = poste;
       }); 
