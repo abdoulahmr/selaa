@@ -7,7 +7,7 @@ import 'package:selaa/user/user_page.dart';
 import 'register/login.dart';
 import 'user/home.dart';
 import 'user/edit_profile.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
 // Function to register a user with email and password
@@ -16,7 +16,6 @@ Future<User?> registerWithEmailPassword({
   required password,
   required firstname,
   required lastname,
-  required type,
   context,
 }) async {
   // Show loading alert while registering
@@ -41,6 +40,8 @@ Future<User?> registerWithEmailPassword({
         'lastname': lastname,
         'email': email,
         'password': password,
+        'username': '',
+        'bio': '',
         'profilePicture': '',
         'phoneNumber': '',
         'address': '',
@@ -267,15 +268,15 @@ Future<void> addPost(
     CollectionReference<Map<String, dynamic>> postsCollection =
         FirebaseFirestore.instance.collection('postes');
     // Reference to the Firebase Storage bucket
-    firebase_storage.Reference storageRef =
-        firebase_storage.FirebaseStorage.instance.ref().child('poste_images');
+    Reference storageRef =
+        FirebaseStorage.instance.ref().child('poste_images');
     // List to store image download URLs
     List<String> imageUrls = [];
     // Upload each image to Firebase Storage
     for (XFile image in images) {
       File file = File(image.path);
       String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-      firebase_storage.Reference imageRef = storageRef.child(imageName);
+      Reference imageRef = storageRef.child(imageName);
       await imageRef.putFile(file);
       String imageUrl = await imageRef.getDownloadURL();
       imageUrls.add(imageUrl);
@@ -350,6 +351,26 @@ Future<List<Map<String, dynamic>>> loadUserInfo() async {
   }
 }
 
+// load seller information
+Future<List<Map<String, dynamic>>> loadSellerInfo(uid) async {
+  try {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .get();
+    if (documentSnapshot.exists) {
+      // Return a list containing user data
+      return [documentSnapshot.data()!];
+    } else {
+      // Handle case when document does not exist
+      return [];
+    }
+  } catch (error) {
+    // Handle errors
+    return [];
+  }
+}
+
 // Load user postes
 Future<List<Map<String, dynamic>>> loadUserPostes() async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -397,4 +418,150 @@ Future<List<Map<String, dynamic>>> loadPosteInfo(String productID) async {
     // Handle errors
     return [];
   }
+}
+
+// Load all postes
+Future<List<Map<String, dynamic>>> loadAllPostes() async {
+  try {
+    // Fetch poste data from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance
+            .collection('postes')
+            .get();
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  } catch (error) {
+    // Handle errors
+    print('Error loading postes: $error');
+    return [];
+  }
+}
+
+// Function to delete poste and associated images
+Future<void> deletePoste(String productID, context) async {
+  try {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.loading,
+      title: 'Loading',
+      text: 'Please wait...',
+    );
+    // Retrieve associated image URLs from Firestore
+    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await FirebaseFirestore.instance.collection('user').doc(productID).get();
+    if (documentSnapshot.exists) {
+      final List<dynamic> imageUrls = documentSnapshot.data()?['imageUrls'] ?? [];
+      // Delete associated images from Firebase Storage
+      for (final String imageUrl in imageUrls) {
+        final Reference imageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+        await imageRef.delete();
+      }
+    }
+    // Delete poste from Firestore
+    await FirebaseFirestore.instance.collection('user').doc(productID).delete();
+    Navigator.pop(context);
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      title: 'Success',
+      text: 'Post deleted successfully!',
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const UserPage()),
+    );
+  } catch (error) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: 'Error deleting post: $error',
+    );
+  }
+}
+
+// add to cart
+Future<void> addItemToCart(String sellerID,String productID,int quantityValue ,String price,context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  int totalPrice = int.parse(price) * quantityValue;
+  if (user != null){
+    try {
+      await FirebaseFirestore.instance.collection('cart').doc().set({
+        'sellerID':sellerID,
+        'buyerID':user.uid,
+        'productID':productID,
+        'quantity':quantityValue,
+        'totalPrice': totalPrice,
+      });
+      Navigator.pop(context);
+    }catch (error) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: 'Error',
+        text: 'Error adding post: $error',
+      );
+    }
+  }
+}
+
+// get items from cart
+Future<List<Map<String, dynamic>>> loadCartItems() async{
+  User? user = FirebaseAuth.instance.currentUser;
+  List<Map<String, dynamic>> userCart = [];
+
+  if (user != null) {
+    try {
+      // Fetch user posts from Firestore
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      await FirebaseFirestore.instance
+          .collection('cart')
+          .where('buyerID', isEqualTo: user.uid)
+          .get();
+
+      // Extract the data from the documents in the query snapshot
+      userCart = querySnapshot.docs.map((doc) => doc.data()).toList();
+    } catch (error) {
+      // Handle any errors that may occur during the process
+    }
+  } else {
+    // Handle case when user is null
+  }
+
+  return userCart;
+}
+
+// calculate total price
+Future<int> calculateTotalPrice() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  int total = 0;
+
+  if (user != null) {
+    try {
+      // Fetch user cart items from Firestore
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('cart')
+              .where('buyerID', isEqualTo: user.uid)
+              .get();
+
+      // Extract the data from the documents in the query snapshot
+      List<Map<String, dynamic>> userCart =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+
+      // Calculate the total price
+      for (int i = 0; i < userCart.length; i++) {
+        // Ensure that the 'totalPrice' field is present and non-null
+        if (userCart[i]['totalPrice'] != null) {
+          total += int.parse(userCart[i]['totalPrice'].toString());
+        }
+      }
+    } catch (error) {
+      // Handle any errors that may occur during the process
+      print('Error calculating total price: $error');
+    }
+  } else {
+    // Handle case when the user is null
+    print('User is null');
+  }
+  return total;
 }

@@ -50,7 +50,6 @@ class SignUp extends StatelessWidget {
         password: _password.text,
         firstname: _firstname.text,
         lastname: _lastname.text,
-        type: "seller",
         context: context,
       );
     }

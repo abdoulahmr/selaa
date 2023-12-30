@@ -12,7 +12,7 @@ class AddPoste extends StatefulWidget {
 }
 
 class _AddPosteState extends State<AddPoste> {
-  final _category = TextEditingController();
+  String _category = 'Tools';
   final _type = TextEditingController();
   final _selling = TextEditingController();
   final _price = TextEditingController();
@@ -44,66 +44,25 @@ class _AddPosteState extends State<AddPoste> {
             Row(
             children: [
               Container(
-                    width: MediaQuery.of(context).size.width * 0.50,
-                    alignment: Alignment.topLeft,
-                    margin: const EdgeInsets.only(top: 50, left: 30),
-                    child: IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.arrowLeft),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 50),
-                    width: MediaQuery.of(context).size.width * 0.32,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(
-                          Size(
-                            MediaQuery.of(context).size.width * 0.25,
-                            MediaQuery.of(context).size.height * 0.04,
-                          ),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Color(0xFF415B5B)),
-                          ),
-                        ),
-                      ),
-                      onPressed: (){
-                        addPost(
-                          _category.text,
-                          _type.text,
-                          _selling.text,
-                          _price.text,
-                          _location.text,
-                          _description.text,
-                          _imageFileList,
-                          context
-                        );
-                      },
-                      child: const Text(
-                        "Publish",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                width: MediaQuery.of(context).size.width * 0.50,
+                alignment: Alignment.topLeft,
+                margin: const EdgeInsets.only(top: 50, left: 30),
+                child: IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.arrowLeft),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
               Container(
-                margin: const EdgeInsets.all(20),
+                margin: const EdgeInsets.only(top: 50),
+                width: MediaQuery.of(context).size.width * 0.32,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(
                       Size(
-                        MediaQuery.of(context).size.width * 0.45,
-                        MediaQuery.of(context).size.height * 0.07,
+                        MediaQuery.of(context).size.width * 0.25,
+                        MediaQuery.of(context).size.height * 0.04,
                       ),
                     ),
                     backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
@@ -114,32 +73,73 @@ class _AddPosteState extends State<AddPoste> {
                       ),
                     ),
                   ),
-                  onPressed: selectImages,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FaIcon(FontAwesomeIcons.camera),
-                      SizedBox(width: 10),
-                      Text(
-                        "Add Images",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  onPressed: (){
+                    addPost(
+                      _category,
+                      _type.text,
+                      _selling.text,
+                      _price.text,
+                      _location.text,
+                      _description.text,
+                      _imageFileList,
+                      context
+                    );
+                  },
+                  child: const Text(
+                    "Publish",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
+                ),
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all(
+                    Size(
+                      MediaQuery.of(context).size.width * 0.45,
+                      MediaQuery.of(context).size.height * 0.07,
+                    ),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: const BorderSide(color: Color(0xFF415B5B)),
+                    ),
+                  ),
+                ),
+                onPressed: selectImages,
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FaIcon(FontAwesomeIcons.camera),
+                    SizedBox(width: 10),
+                    Text(
+                      "Add Images",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(_imageFileList.length, (index) {
-                      return Container(
-                        margin: const EdgeInsets.all(10),
-                        child: Stack(
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(_imageFileList.length, (index) {
+                    return Container(
+                      margin: const EdgeInsets.all(10),
+                      child: Stack(
                           children: [
                             Image.file(
                               File(_imageFileList[index].path),
@@ -190,18 +190,41 @@ class _AddPosteState extends State<AddPoste> {
               ),
               Container(
                 margin: const EdgeInsets.all(20),
-                child: TextFormField(
-                  controller: _category,
-                  decoration: InputDecoration(
-                    labelText: "Category",
-                    labelStyle: const TextStyle(
-                      color: Color(0xFF415B5B),
-                    ),  
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF415B5B)))),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                width: MediaQuery.of(context).size.width * 0.90,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xFF415B5B),
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
+                child: DropdownButton<String>(
+                  value: _category,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _category = newValue!;
+                    });
+                  },
+                  items: [
+                    'Tools',
+                    'Garment',
+                    'Electronics',
+                    'Home Appliance',
+                    'House',
+                    'Electric',
+                    'Games',
+                    'Various Products',
+                    'Parapharmacy',
+                    'Baby',
+                    'Sports Products',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )
               ),
               Container(
                 margin: const EdgeInsets.all(20),

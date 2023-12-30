@@ -4,8 +4,8 @@ import 'package:selaa/user/add_poste.dart';
 import 'package:selaa/user/edit_profile.dart';
 import 'package:selaa/user/home.dart';
 import 'package:selaa/user/notification.dart';
-import 'package:selaa/user/order.dart';
 import 'package:selaa/user/product_page.dart';
+import 'package:selaa/user/shopping_cart.dart';
 import '../functions.dart';
 
 class UserPage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _UserPage extends State<UserPage> {
     const Home(),
     const UserPage(),
     const NotificationPage(),
-    const OrderPage(),
+    const ShoppingCart(),
   ];
 
   @override
@@ -344,10 +344,10 @@ class _UserPage extends State<UserPage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.sort,
+                Icons.shopping_cart_outlined,
                 size: 35,
               ),
-              label: "Order",
+              label: "Cart",
             ),
           ],
         ),
