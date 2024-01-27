@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "704459372046",
+    "project_id": "selaa-93e88",
+    "storage_bucket": "selaa-93e88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704459372046:android:deffa518e69cc3928c6e5f",
+        "android_client_info": {
+          "package_name": "com.example.selaa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDkKi-2GtUrhDbp03eWE-mXmgYozspDWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
