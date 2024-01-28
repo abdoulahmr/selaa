@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/buyer/home_buyer.dart';
-import 'package:selaa/seller/home.dart';
+import 'package:selaa/seller/home_seller.dart';
 import 'package:selaa/functions.dart';
 
 class RedirectLogin extends StatefulWidget {
@@ -32,8 +32,8 @@ class _PreLoginState extends State<RedirectLogin> {
       home: userType == "buyer"
           ? const HomeBuyer()
           : userType == "seller"
-              ? const HomeSeller() // Use the appropriate seller home screen
-              : const RedirectLogin(),
+              ? const HomeSeller()
+              : Container(),
     );
   }
 }

@@ -427,62 +427,65 @@ Future<List<Map<String, dynamic>>> loadSellerInfo(uid,context) async {
 }
 
 // Load user postes
-Future<List<Map<String, dynamic>>> loadUserPostes(context) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  List<Map<String, dynamic>> userPostes = [];
+Future<List<Map<String, dynamic>>> loadUserPostes() async {
+  List<Map<String, dynamic>> result = [];
 
-  if (user != null) {
-    try {
-      // Fetch user posts from Firestore
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection('products')
-              .where('sellerID', isEqualTo: user.uid)
-              .get();
-      // Extract the data from the documents in the query snapshot
-      userPostes = querySnapshot.docs.map((doc) => doc.data()).toList();
-    } catch (error) {
-      // Handle any errors that may occur during the process
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Error',
-        text: 'Error loading products please send us a feedback',
-      );
-      return [];
-    }
-  } else {
-    // Handle case when user is null
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      title: 'Error',
-      text: 'User is not authenticated.',
-    );
+  // Fetch products
+  QuerySnapshot productsSnapshot = await FirebaseFirestore.instance.collection('products').get();
+  List<DocumentSnapshot> products = productsSnapshot.docs;
+
+  // Fetch categories
+  Map<String, String> categoryMap = {};
+  QuerySnapshot categoriesSnapshot = await FirebaseFirestore.instance.collection('productCategory').get();
+  for (var categoryDoc in categoriesSnapshot.docs) {
+    categoryMap[categoryDoc.id] = categoryDoc['name'];
   }
-  return userPostes;
+
+  // Combine product and category information
+  for (var product in products) {
+    Map<String, dynamic> productData = product.data() as Map<String, dynamic>;
+    String categoryId = productData['category'];
+
+    // Check if category exists
+    if (categoryMap.containsKey(categoryId)) {
+      productData['categoryName'] = categoryMap[categoryId];
+      result.add(productData);
+    }
+  }
+
+  return result;
 }
+
 
 // load poste information
 Future<List<Map<String, dynamic>>> loadPosteInfo(String productID, context) async {
-  try {
-    // Fetch poste data from Firestore
-    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        await FirebaseFirestore.instance
-            .collection('products')
-            .doc(productID)
-            .get();
+  List<Map<String, dynamic>> result = [];
 
-    if (documentSnapshot.exists) {
-      // Return a list containing poste data
-      return [documentSnapshot.data()!];
+  try {
+    // Fetch product data from Firestore
+    DocumentSnapshot<Map<String, dynamic>> productSnapshot =
+      await FirebaseFirestore.instance.collection('products')
+        .doc(productID)
+        .get();
+
+    if (productSnapshot.exists) {
+      // Fetch category data using the category ID from the product
+      String categoryID = productSnapshot.data()?['category'];
+      DocumentSnapshot<Map<String, dynamic>> categorySnapshot =
+          await FirebaseFirestore.instance.collection('productCategory').doc(categoryID).get();
+
+      // Add product and category data to the result list
+      result.add(productSnapshot.data()!);
+      result.add(categorySnapshot.data()!);
+
+      return result;
     } else {
-      // Handle case when document does not exist
+      // Handle case when product document does not exist
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
         title: 'Error',
-        text: 'Error loading products please send us a feedback',
+        text: 'Error loading product. Please send us feedback.',
       );
       return [];
     }
@@ -492,7 +495,7 @@ Future<List<Map<String, dynamic>>> loadPosteInfo(String productID, context) asyn
       context: context,
       type: QuickAlertType.error,
       title: 'Error',
-      text: 'Error loading products please send us a feedback',
+      text: 'Error loading product. Please send us feedback.',
     );
     return [];
   }

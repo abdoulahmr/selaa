@@ -152,7 +152,7 @@ class _ProductPageState extends State<ProductPage> {
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Text(
-                posteInfo.isNotEmpty ? posteInfo[0]['category']+" > "+posteInfo[0]['type']?? '' : '',
+                posteInfo.isNotEmpty ? posteInfo[0]['categoryName'] : '',
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   fontSize: 16,
@@ -204,7 +204,7 @@ class _ProductPageState extends State<ProductPage> {
                 ),
               ),
               child: Text(
-                posteInfo.isNotEmpty ? posteInfo[0]['price']+" DZ" : '',
+                posteInfo.isNotEmpty ? "${posteInfo[0]['price']} DZ" : '',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 16,

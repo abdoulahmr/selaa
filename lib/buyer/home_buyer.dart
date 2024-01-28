@@ -329,7 +329,7 @@ class _HomeState extends State<HomeBuyer> {
                                   height: MediaQuery.of(context).size.height * 0.03,
                                   width: MediaQuery.of(context).size.width,
                                   child: Text(
-                                    postes[startIndex]['price']+" DZ",
+                                    "${postes[startIndex]['price']} DZ",
                                     textAlign: TextAlign.center,                                
                                     style: const TextStyle(
                                       fontSize: 15,
@@ -387,7 +387,7 @@ class _HomeState extends State<HomeBuyer> {
                                   height: MediaQuery.of(context).size.height * 0.03,
                                   width: MediaQuery.of(context).size.width,
                                   child: Text(
-                                    postes[endIndex]['price']+" DZ",
+                                    "${postes[endIndex]['price']} DZ",
                                     textAlign: TextAlign.center,                                
                                     style: const TextStyle(
                                       fontSize: 15,

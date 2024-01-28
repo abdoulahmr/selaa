@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:selaa/seller/add_poste.dart';
 import 'package:selaa/seller/edit_profile.dart';
-import 'package:selaa/seller/home.dart';
+import 'package:selaa/seller/home_seller.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/product_page.dart';
 import 'package:selaa/seller/shopping_cart.dart';
@@ -34,7 +34,7 @@ class _UserPage extends State<UserPage> {
         userInfo = user;
       });
     });
-    loadUserPostes(context).then((List<Map<String, dynamic>> postes) {
+    loadUserPostes().then((List<Map<String, dynamic>> postes) {
       setState(() {
         userPostes = postes;
       });
@@ -265,16 +265,8 @@ class _UserPage extends State<UserPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      userPostes[index]['category'],
+                                      userPostes[index]['categoryName'],
                                       textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      userPostes[index]['type'],
-                                      textAlign: TextAlign.left,                                    
                                       style: const TextStyle(
                                         fontSize: 18,
                                       ),
@@ -283,7 +275,7 @@ class _UserPage extends State<UserPage> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  userPostes[index]['price'],
+                                  "${userPostes[index]['price']} DZD",
                                   style: const TextStyle(
                                     fontSize: 18,
                                   ),
