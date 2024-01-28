@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:selaa/settings/change_email.dart';
+import 'package:selaa/settings/change_password.dart';
 import 'package:selaa/settings/phone_number.dart';
 import 'package:selaa/settings/shipping_adress.dart';
 
@@ -18,31 +18,15 @@ class SettingsList extends StatelessWidget {
           GestureDetector(
             onTap: (){
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChangeEmailPage()),
+                context, 
+                MaterialPageRoute(builder: (context) => ChangePasswordPage())
               );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              height: MediaQuery.of(context).size.height * 0.05,
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                'Email',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              )
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-              print('tapped');
             },
             child: Container(
               margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
               height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
-              child: Text(
+              child: const Text(
                 'Password',
                 style: TextStyle(
                   fontSize: 20,
@@ -61,7 +45,7 @@ class SettingsList extends StatelessWidget {
               margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
               height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
-              child: Text(
+              child: const Text(
                 'Phone number',
                 style: TextStyle(
                   fontSize: 20,
@@ -80,7 +64,7 @@ class SettingsList extends StatelessWidget {
               margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
               height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
-              child: Text(
+              child: const Text(
                 'Shipping address',
                 style: TextStyle(
                   fontSize: 20,
@@ -91,7 +75,7 @@ class SettingsList extends StatelessWidget {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.01,
-            color: Color.fromARGB(255, 185, 185, 185),
+            color: const Color.fromARGB(255, 185, 185, 185),
           ),
         ],
       ),

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:selaa/functions.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/seller/product_page.dart';
 
 class ProductSearchPage extends StatefulWidget {
+  const ProductSearchPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ProductSearchPageState createState() => _ProductSearchPageState();
 }
 
 class _ProductSearchPageState extends State<ProductSearchPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _searchResults = [];
   List<Map<String, dynamic>> _productList = [];
 
@@ -45,32 +48,32 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: IconButton(
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back,
-                    color: const Color(0xFF415B5B),
+                    color: Color(0xFF415B5B),
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 height: MediaQuery.of(context).size.height * 0.06,
                 child: TextFormField(
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Search for a product',
-                    suffixIcon: Icon(
+                    suffixIcon: const Icon(
                       Icons.search,
-                      color: const Color(0xFF415B5B),
+                      color: Color(0xFF415B5B),
                     ),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: const Color(0xFF415B5B)),
+                      borderSide: const BorderSide(color: Color(0xFF415B5B)),
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                   ),

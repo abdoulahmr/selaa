@@ -1,15 +1,11 @@
-// ignore_for_file: avoid_unnecessary_containers, avoid_print, sized_box_for_whitespace
-
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:selaa/functions.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/product_page.dart';
 import 'package:selaa/seller/shopping_cart.dart';
 import 'package:selaa/seller/user_page.dart';
-import 'package:selaa/settings/options_menu.dart';
 import 'package:selaa/buyer/product_search_list.dart';
+import 'package:selaa/settings/buyer_options_menu.dart';
 
 class HomeBuyer extends StatefulWidget {
   const HomeBuyer({Key? key}) : super(key: key);
@@ -30,30 +26,16 @@ class _HomeState extends State<HomeBuyer> {
 
   List<Map<String, dynamic>> postes = [];
 
-  Future<void> loadProfilePicture() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      if (snapshot.exists) {
-        final data = snapshot.data();
-        setState(() {
-          profilePicture = data?['profilePicture'] ?? '';
-        });
-      } else {
-        // Handle case when snapshot doesn't exist
-      }
-    } else {
-      // Handle case when user is null
-    }
-  }
+  
 
   @override
   void initState() {
     super.initState();
-    loadProfilePicture();
+    loadProfilePicture(context).then((data){
+      setState(() {
+        profilePicture = data;
+      });
+    });
     loadAllPostes(context).then((List<Map<String, dynamic>> data) {
       setState(() {
         postes = data;
@@ -94,7 +76,7 @@ class _HomeState extends State<HomeBuyer> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const OptionsMenu()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const BuyerOptionsMenu()));
                       },
                       child: const Icon(Icons.menu),
                     ),
@@ -134,141 +116,139 @@ class _HomeState extends State<HomeBuyer> {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage()));
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF4F4F4),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: const Color(0xFF415B5B),
-                            width: 1,
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage()));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF4F4F4),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: const Color(0xFF415B5B),
+                          width: 1,
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Search...",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          Icon(
+                            Icons.search,
+                            color: Color(0xFF415B5B),
+                          )
+                        ],
+                      ),
+                    )
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width /6,
+                        height: MediaQuery.of(context).size.height / 15,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFCCE6E6),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              print("Electronics");
+                            },
+                            icon: const Icon(Icons.devices),
+                              iconSize: 30,
+                              color: const Color(0xFF008080),
                           ),
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Search...",
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width /6,
+                        height: MediaQuery.of(context).size.height / 15,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFCCE6E6),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              print("Food");
+                            },
+                            icon: const Icon(Icons.fastfood_outlined),
+                            iconSize: 30,
+                            color: const Color(0xFF008080),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width /6,
+                        height: MediaQuery.of(context).size.height / 15,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFCCE6E6),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              print("Fashion");
+                            },
+                            icon: const Icon(Icons.checkroom),
+                            iconSize: 30,
+                            color: const Color(0xFF008080),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width /6,
+                        height: MediaQuery.of(context).size.height / 15,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFFCCE6E6),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              print("Furniture");
+                            },
+                            icon : const Icon(Icons.chair_outlined),
+                            iconSize: 30,
+                            color: const Color(0xFF008080),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width /9,
+                        height: MediaQuery.of(context).size.height / 15,
+                        child: Center(
+                          child: InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: const Text(
+                              "See More",
                               style: TextStyle(
                                 fontSize: 16,
+                                color: Color(0xFF008080),
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Icon(
-                              Icons.search,
-                              color: Color(0xFF415B5B),
-                            )
-                          ],
-                        ),
-                      )
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width /6,
-                          height: MediaQuery.of(context).size.height / 15,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFCCE6E6),
                           ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                print("Electronics");
-                              },
-                              icon: const Icon(Icons.devices),
-                                iconSize: 30,
-                                color: const Color(0xFF008080),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width /6,
-                          height: MediaQuery.of(context).size.height / 15,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFCCE6E6),
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                print("Food");
-                              },
-                              icon: const Icon(Icons.fastfood_outlined),
-                              iconSize: 30,
-                              color: const Color(0xFF008080),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width /6,
-                          height: MediaQuery.of(context).size.height / 15,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFCCE6E6),
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                print("Fashion");
-                              },
-                              icon: const Icon(Icons.checkroom),
-                              iconSize: 30,
-                              color: const Color(0xFF008080),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width /6,
-                          height: MediaQuery.of(context).size.height / 15,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFFCCE6E6),
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                print("Furniture");
-                              },
-                              icon : const Icon(Icons.chair_outlined),
-                              iconSize: 30,
-                              color: const Color(0xFF008080),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width /9,
-                          height: MediaQuery.of(context).size.height / 15,
-                          child: Center(
-                            child: InkWell(
-                              onTap: () {
-                                
-                              },
-                              child: const Text(
-                                "See More",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFF008080),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          )
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                        )
+                      ),
+                    ],
+                  )
+                ],
               ),
               Container(
                 margin: const EdgeInsets.only(left:10),
@@ -286,7 +266,7 @@ class _HomeState extends State<HomeBuyer> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
-                          onTap: (){
+                          onTap: ()async{
                             Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(productID: postes[index]['productID'])));
                           },
                           child: Container(
@@ -312,7 +292,7 @@ class _HomeState extends State<HomeBuyer> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
+                                SizedBox(
                                   height: MediaQuery.of(context).size.height * 0.07,
                                   width: MediaQuery.of(context).size.width,
                                   child: Text(
@@ -325,7 +305,7 @@ class _HomeState extends State<HomeBuyer> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
+                                SizedBox(
                                   height: MediaQuery.of(context).size.height * 0.03,
                                   width: MediaQuery.of(context).size.width,
                                   child: Text(
@@ -370,7 +350,7 @@ class _HomeState extends State<HomeBuyer> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
+                                SizedBox(
                                   height: MediaQuery.of(context).size.height * 0.07,
                                   width: MediaQuery.of(context).size.width,
                                   child: Text(
@@ -383,7 +363,7 @@ class _HomeState extends State<HomeBuyer> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
+                                SizedBox(
                                   height: MediaQuery.of(context).size.height * 0.03,
                                   width: MediaQuery.of(context).size.width,
                                   child: Text(

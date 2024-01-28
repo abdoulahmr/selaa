@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:selaa/functions.dart';
+import 'package:selaa/backend-functions/account_settings.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 
 class AddPhoneNumberPage extends StatefulWidget {
+  const AddPhoneNumberPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AddPhoneNumberPageState createState() => _AddPhoneNumberPageState();
 }
 
 class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
-  TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
   bool isEditing = false;
 
   @override
   void initState() {
-    getUserPhoneNumber().then((value) {
+    getUserPhoneNumber(context).then((value) {
       setState(() {
         _phoneNumberController.text = value;
       });
@@ -25,12 +29,12 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Phone Number'),
+        title: const Text('Add Phone Number'),
         backgroundColor: const Color(0xFF008080),
         actions: [
           if (!isEditing)
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () {
                 setState(() {
                   isEditing = true;
@@ -45,17 +49,17 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
           Container(
             margin: const EdgeInsets.all(20),
             child: _phoneNumberController.text == ''
-                ? Column(
+                ? const Column(
                     children: [
-                      const Text(
+                      Text(
                         "Add Your Phone Number",
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
+                      SizedBox(height: 20),
+                      Text(
                         "We just need your phone number to contact you if there is any problem with your order.",
                         style: TextStyle(
                           fontSize: 15,
@@ -63,18 +67,18 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
                       ),
                     ],
                   )
-                : Column(
+                : const Column(
                     children: [
-                      const SizedBox(height: 20),
-                      const Text(
+                      SizedBox(height: 20),
+                      Text(
                         "Your Phone Number",
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
+                      SizedBox(height: 20),
+                      Text(
                         "press the edit button to change your phone number.",
                         style: TextStyle(
                           fontSize: 15,
@@ -107,7 +111,7 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
           ),
           if (isEditing)
             Container(
-              margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.05,
               child: ElevatedButton(
@@ -138,7 +142,7 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
                     );
                   }
                 },
-                child: Text('Add'),
+                child: const Text('Add'),
               ),
             ),
         ],

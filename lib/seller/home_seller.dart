@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:selaa/functions.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/shopping_cart.dart';
 import 'package:selaa/seller/user_page.dart';
-import 'package:selaa/settings/options_menu.dart';
+import 'package:selaa/settings/seller_option_menu.dart';
 
 class HomeSeller extends StatefulWidget {
   const HomeSeller({Key? key}) : super(key: key);
@@ -29,30 +27,14 @@ class _HomeState extends State<HomeSeller> {
 
   List<Map<String, dynamic>> postes = [];
 
-  Future<void> loadProfilePicture() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      if (snapshot.exists) {
-        final data = snapshot.data();
-        setState(() {
-          profilePicture = data?['profilePicture'] ?? '';
-        });
-      } else {
-        // Handle case when snapshot doesn't exist
-      }
-    } else {
-      // Handle case when user is null
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    loadProfilePicture();
+    loadProfilePicture(context).then((data){
+      setState(() {
+        profilePicture = data;
+      });
+    });
     loadAllPostes(context).then(
       (List<Map<String, dynamic>> data) {
       setState(() {

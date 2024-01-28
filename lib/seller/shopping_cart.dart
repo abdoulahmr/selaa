@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:selaa/functions.dart';
+import 'package:selaa/backend-functions/data_manipulation.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/seller/home_seller.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/product_page.dart';

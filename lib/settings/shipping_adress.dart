@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:selaa/functions.dart';
+import 'package:selaa/backend-functions/account_settings.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 
 class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
   @override
   void initState() { 
     super.initState();
-    getUserShippingAddress().then((String data) {
+    getUserShippingAddress(context).then((String data) {
       setState(() {
         userAddress = data;
       });
@@ -28,8 +29,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shipping Address'),
-        backgroundColor: Color(0xFF008080),
+        title: const Text('Shipping Address'),
+        backgroundColor: const Color(0xFF008080),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -57,7 +58,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _addressController,
               decoration: InputDecoration(
@@ -71,7 +72,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _zipCodeController,
               decoration: InputDecoration(
@@ -85,7 +86,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                 ),
               ),
             ),
-            SizedBox(height: 32.0),
+            const SizedBox(height: 32.0),
             ElevatedButton(
               style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
@@ -104,9 +105,9 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                 ),
               ),
               onPressed: () {
-                updateUserShippingAddress(_addressController.text+','+_cityController.text+','+_zipCodeController.text, context);
+                updateUserShippingAddress('${_addressController.text},${_cityController.text},${_zipCodeController.text}', context);
               },
-              child: Text('Save Address'),
+              child: const Text('Save Address'),
             ),
           ],
         ),

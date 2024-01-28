@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/home_buyer.dart';
 import 'package:selaa/seller/home_seller.dart';
-import 'package:selaa/functions.dart';
 
 class RedirectLogin extends StatefulWidget {
   const RedirectLogin({Key? key}) : super(key: key);

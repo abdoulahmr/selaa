@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/seller/add_poste.dart';
 import 'package:selaa/seller/edit_profile.dart';
 import 'package:selaa/seller/home_seller.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/product_page.dart';
 import 'package:selaa/seller/shopping_cart.dart';
-import '../functions.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);

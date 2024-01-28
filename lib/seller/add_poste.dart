@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import '../functions.dart';
+import '../backend-functions/data_manipulation.dart';
 
 class AddPoste extends StatefulWidget {
   const AddPoste({Key? key}) : super(key: key);

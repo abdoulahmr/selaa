@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:selaa/backend-functions/auth.dart';
 import 'package:selaa/register/redirect_login.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/settings/settings_list.dart';
 import 'package:selaa/seller/user_page.dart';
-import '../functions.dart';
 
 class OptionsMenu extends StatelessWidget {
   const OptionsMenu({super.key});
@@ -21,7 +21,7 @@ class OptionsMenu extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RedirectLogin()),
+                    MaterialPageRoute(builder: (context) => const RedirectLogin()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -51,7 +51,7 @@ class OptionsMenu extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
+                    MaterialPageRoute(builder: (context) => const UserPage()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -74,7 +74,7 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},
@@ -98,13 +98,13 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SettingsList()),
+                    MaterialPageRoute(builder: (context) => const SettingsList()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -127,13 +127,13 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()),
+                    MaterialPageRoute(builder: (context) => const NotificationPage()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -156,7 +156,7 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},
@@ -180,7 +180,7 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},
@@ -229,7 +229,7 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},
@@ -253,7 +253,7 @@ class OptionsMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                 onPressed: () {},

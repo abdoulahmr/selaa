@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quantity_input/quantity_input.dart';
-import '../functions.dart';
+import 'package:selaa/backend-functions/load_data.dart';
+import '../backend-functions/data_manipulation.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key, required this.productID}) : super(key: key);
@@ -19,40 +19,21 @@ class _ProductPageState extends State<ProductPage> {
   List<Map<String, dynamic>> posteInfo = [];
   int quantityValue = 1;
 
-  // load seller information
-  Future<List<Map<String, dynamic>>> loadSellerInfo(uid) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .get();
-      if (documentSnapshot.exists) {
-        // Return a list containing user data
-        return [documentSnapshot.data()!];
-      } else {
-        // Handle case when document does not exist
-        return [];
-      }
-    } catch (error) {
-      // Handle errors
-      return [];
-    }
-  }
 
  @override
   void initState() {
     super.initState();
-    loadPosteInfo(widget.productID,context).then((List<Map<String, dynamic>> poste) {
+    loadPosteInfo(widget.productID, context).then((List<Map<String, dynamic>> poste) {
       setState(() {
         posteInfo = poste;
-      }); 
-      if (posteInfo.isNotEmpty) {
-        loadSellerInfo(posteInfo[0]['userId']).then((List<Map<String, dynamic>> user) {
-          setState(() {
-            userInfo = user;
+        if (posteInfo.isNotEmpty) {
+          loadSellerInfo(posteInfo[0]['sellerID'], context).then((List<Map<String, dynamic>> user) {
+            setState(() {
+              userInfo = user;
+            });
           });
-        });
-      }
+        }
+      });
     });
   }
 
@@ -134,7 +115,7 @@ class _ProductPageState extends State<ProductPage> {
                 : const Text('No images available'),
             ),
             const SizedBox(height: 10),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -149,10 +130,10 @@ class _ProductPageState extends State<ProductPage> {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Text(
-                posteInfo.isNotEmpty ? posteInfo[0]['categoryName'] : '',
+                posteInfo.isNotEmpty ? posteInfo[1]['name'] : '',
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   fontSize: 16,
@@ -242,54 +223,53 @@ class _ProductPageState extends State<ProductPage> {
               )
             ),
             const SizedBox(height: 10),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Visibility(
-                    visible: posteInfo.isNotEmpty && FirebaseAuth.instance.currentUser?.uid != posteInfo[0]['userId'],
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(
-                          Size(
-                            MediaQuery.of(context).size.width * 0.35,
-                            MediaQuery.of(context).size.height * 0.06,
-                          ),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Color(0xFF415B5B)),
-                          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Visibility(
+                  visible: posteInfo.isNotEmpty && FirebaseAuth.instance.currentUser?.uid != posteInfo[0]['userId'],
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all(
+                        Size(
+                          MediaQuery.of(context).size.width * 0.35,
+                          MediaQuery.of(context).size.height * 0.06,
                         ),
                       ),
-                      child: const Text('Add to cart'),
-                      onPressed: () {
-                        addItemToCart(
-                          posteInfo[0]['sellerID'], 
-                          widget.productID, 
-                          quantityValue,
-                          posteInfo[0]['price'],
-                          context);
-                      }
-                    ),
-                  ),
-                  QuantityInput(
-                    value: quantityValue,
-                    minValue: 1,
-                    buttonColor: Color(0xFF008080),
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF008080),
+                      backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: const BorderSide(color: Color(0xFF415B5B)),
                         ),
                       ),
                     ),
-                    onChanged: (value) => setState(() => quantityValue = int.parse(value.replaceAll(',', '')))
+                    child: const Text('Add to cart'),
+                    onPressed: () async {
+                      addItemToCart(
+                        posteInfo[0]['sellerID'], 
+                        widget.productID, 
+                        quantityValue,
+                        int.parse(posteInfo[0]['price']),
+                        context
+                      );
+                    }
                   ),
-                ],
-              ),
+                ),
+                QuantityInput(
+                  value: quantityValue,
+                  minValue: 1,
+                  buttonColor: const Color(0xFF008080),
+                  decoration: const InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF008080),
+                      ),
+                    ),
+                  ),
+                  onChanged: (value) => setState(() => quantityValue = int.parse(value.replaceAll(',', '')))
+                ),
+              ],
             ),
             const SizedBox(height: 30),
           ],
