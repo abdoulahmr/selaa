@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:selaa/backend-functions/data_manipulation.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/seller/home_seller.dart';
+import 'package:selaa/buyer/home_buyer.dart';
 import 'package:selaa/buyer/notification.dart';
+import 'package:selaa/buyer/oreder_structure.dart';
 import 'package:selaa/seller/product_page.dart';
 import 'package:selaa/seller/user_page.dart';
 
@@ -17,10 +17,12 @@ class ShoppingCart extends StatefulWidget {
 class _ShoppingCartState extends State<ShoppingCart> {
   List<Map<String, dynamic>> userInfo = [];
   List<Map<String, dynamic>> shoppingCart = [];
-  int totalPrice = 0;
+  List<OrderItem> orderItems = [];
+  String shippingAdress = '';
+  double totalPrice = 0;
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    const HomeSeller(),
+    const HomeBuyer(),
     const UserPage(),
     const NotificationPage(),
     const ShoppingCart(),
@@ -34,7 +36,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         shoppingCart = items;
       });
     });
-    calculateTotalPrice(context).then((int price) {
+    calculateTotalPrice(context).then((double price) {
       setState(() {
         totalPrice = price;
       });
@@ -42,6 +44,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
     loadUserInfo(context).then((List<Map<String, dynamic>> info) {
       setState(() {
         userInfo = info;
+      });
+    });
+    getUserShippingAddress(context).then((String adress){
+      setState(() {
+        shippingAdress = adress;
       });
     });
   }
@@ -76,8 +83,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         ),
                       ),
                       Text(
-                        "Total : "+totalPrice.toString()+" DZD",
-                        style: TextStyle(
+                        "Total : $totalPrice DZD",
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -89,7 +96,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(
                         Size(
-                          MediaQuery.of(context).size.width * 0.4,
+                          MediaQuery.of(context).size.width * 0.25,
                           MediaQuery.of(context).size.height * 0.06,
                         ),
                       ),
@@ -104,98 +111,114 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     child: const Text('Confirm Order'),
                     onPressed: () {
                       if(totalPrice>userInfo[0]['balance']){
-                        QuickAlert.show(
-                          context: context, 
-                          type: QuickAlertType.error,
-                          title: "Not enough credit",
-                          text: "You don't have enough credit to confirm this order",
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("You don't have enough credit to confirm this order"),
+                          ),
                         );
                       }else{
-                        print(shoppingCart);
+                        if(shippingAdress==''){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please update shipping adres (settings>shipping adress)'),
+                            ),
+                          );
+                        }else{
+                          for(int index=0;index<shoppingCart.length;index++){
+                            saveOrder(
+                              shoppingCart[index]['productDetails']['title'],
+                              shoppingCart[index]['productDetails']['productID'],
+                              shoppingCart[index]['productDetails']['sellerID'],
+                              shoppingCart[index]['quantity'],
+                              double.parse(shoppingCart[index]['productDetails']['price']),
+                              shippingAdress,
+                              "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
+                              context
+                            );
+                          }
+                        }
                       }
                     }
                   ),
                 ],
               ),
             ),
-            Container(
-              child: ListView.builder(
-                itemCount: shoppingCart.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductPage(productID: shoppingCart[index]['productDetails']['productID']),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 230, 230, 230),
-                        borderRadius: const BorderRadius.all(Radius.circular(30)),
+            ListView.builder(
+              itemCount: shoppingCart.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductPage(productID: shoppingCart[index]['productDetails']['productID']),
                       ),
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.all(Radius.circular(25.0)),
-                            child: Image.network(
-                              shoppingCart[index]['productDetails']['imageUrls'][0],
-                              height: MediaQuery.of(context).size.height * 0.1,
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              fit: BoxFit.cover,
+                    );
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 230, 230, 230),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                          child: Image.network(
+                            shoppingCart[index]['productDetails']['imageUrls'][0],
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: Text(
+                            shoppingCart[index]['productDetails']["title"],
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: Text(
-                              shoppingCart[index]['productDetails']["title"],
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
+                        ),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.1,
+                          child: Text(
+                            shoppingCart[index]['quantity'].toString(),
                           ),
-                          const SizedBox(width: 10),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
-                            child: Text(
-                              shoppingCart[index]['quantity'].toString(),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if (index < shoppingCart.length) {
-                                deleteItemFromCart(shoppingCart[index]['productDetails']['productID'],context);
-                                setState(() {
-                                  shoppingCart.removeAt(index);
-                                  calculateTotalPrice(context).then((int price) {
-                                    setState(() {
-                                      totalPrice = price;
-                                    });
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (index < shoppingCart.length) {
+                              deleteItemFromCart(shoppingCart[index]['productDetails']['productID'],context);
+                              setState(() {
+                                shoppingCart.removeAt(index);
+                                calculateTotalPrice(context).then((double price) {
+                                  setState(() {
+                                    totalPrice = price;
                                   });
                                 });
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          )
-                        ],
-                      ),
+                              });
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        )
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             )
           ],
         ),

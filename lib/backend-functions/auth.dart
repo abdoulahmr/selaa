@@ -65,13 +65,13 @@ Future<User?> registerWithEmailPassword({
     if (e.code == 'weak-password') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Password should be at least 8 characters'),
+          content: Text('Password should be at least 8 characters. code 9'),
         ),
       );
     } else if (e.code == 'email-already-in-use') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('The account already exists for that email.'),
+          content: Text('The account already exists for that email. code 10'),
         ),
       );
     }
@@ -79,7 +79,7 @@ Future<User?> registerWithEmailPassword({
     // Handle other exceptions
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error creating account please send us a feedback'),
+        content: Text('Error creating account please send us a feedback code 11'),
       ),
     );
   }
@@ -111,7 +111,7 @@ Future<User?> loginWithEmailPassword(
       // Show info alert if email is not verified
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Please confirm your email address!'),
+          content: const Text('Please confirm your email address! code 12'),
           action: SnackBarAction(
             label: 'Resend',
             onPressed: () {
@@ -129,19 +129,19 @@ Future<User?> loginWithEmailPassword(
     if (e.code == 'user-not-found') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('No user found for $email.'),
+          content: Text('No user found for $email. code 13'),
         ),
       );
     } else if (e.code == 'wrong-password') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Wrong password provided for that user.'),
+          content: Text('Wrong password provided for that user. code 14'),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error logging in please send us a feedback'),
+          content: Text('Error logging in please send us a feedback code 15'),
         ),
       );
     }
@@ -149,7 +149,7 @@ Future<User?> loginWithEmailPassword(
     // Handle other exceptions
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error logging in please send us a feedback'),
+        content: Text('Error logging in please send us a feedback code 16'),
       ),
     );
   }
@@ -162,13 +162,13 @@ Future<void> resendEmailVerification(User user, context) async {
     await user.sendEmailVerification();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Verification email sent. Please check your inbox.'),
+        content: Text('Verification email sent. Please check your inbox.  code 17'),
       ),
     );
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error sending verification email. Please try again.'),
+        content: Text('Error sending verification email. Please try again.  code 18'),
       ),
     );
   }
@@ -185,7 +185,7 @@ Future<void> signOut(context) async {
     // Handle errors
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error signing out please send us a feedback'),
+        content: Text('Error signing out please send us a feedback code 19'),
       ),
     );
   }

@@ -16,7 +16,7 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   List<Map<String, dynamic>> userInfo = [];
-  List<Map<String, dynamic>> posteInfo = [];
+  List posteInfo = [];
   int quantityValue = 1;
 
 
@@ -250,7 +250,7 @@ class _ProductPageState extends State<ProductPage> {
                         posteInfo[0]['sellerID'], 
                         widget.productID, 
                         quantityValue,
-                        int.parse(posteInfo[0]['price']),
+                        posteInfo[0]['price'],
                         context
                       );
                     }

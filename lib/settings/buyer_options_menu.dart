@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/auth.dart';
+import 'package:selaa/buyer/my_orders.dart';
 import 'package:selaa/register/redirect_login.dart';
 import 'package:selaa/settings/settings_list.dart';
 
@@ -98,7 +99,9 @@ class BuyerOptionsMenu extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrdersPage()));
+                },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Colors.white),
                 ),

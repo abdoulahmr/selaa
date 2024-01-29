@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/product_page.dart';
-import 'package:selaa/seller/shopping_cart.dart';
+import 'package:selaa/buyer/shopping_cart.dart';
 import 'package:selaa/seller/user_page.dart';
 import 'package:selaa/buyer/product_search_list.dart';
 import 'package:selaa/settings/buyer_options_menu.dart';
@@ -15,7 +15,6 @@ class HomeBuyer extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeBuyer> {
-  String profilePicture = '';
   int _currentIndex = 0;
   final List<Widget> _pages = [
     const HomeBuyer(),
@@ -23,19 +22,11 @@ class _HomeState extends State<HomeBuyer> {
     const NotificationPage(),
     const ShoppingCart(),
   ];
-
   List<Map<String, dynamic>> postes = [];
-
-  
 
   @override
   void initState() {
     super.initState();
-    loadProfilePicture(context).then((data){
-      setState(() {
-        profilePicture = data;
-      });
-    });
     loadAllPostes(context).then((List<Map<String, dynamic>> data) {
       setState(() {
         postes = data;
@@ -89,17 +80,16 @@ class _HomeState extends State<HomeBuyer> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(right: 30),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const UserPage()));
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.notifications,
+                          size: 40,
+                          color: Color(0xFF008080),
+                          ),
+                        onPressed: (){
+
                         },
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundImage: profilePicture.isNotEmpty
-                              ? NetworkImage(profilePicture)
-                              : const NetworkImage('https://firebasestorage.googleapis.com/v0/b/selaa-2ff93.appspot.com/o/profilePicture%2Fkisspng-computer-icons-download-avatar-5b3848b5343f86.741661901530415285214-removebg-preview%20(1).png?alt=media&token=0c01bbf5-f998-4ad9-af94-235ba6fd4ab5'),
-                        ),
-                      ),
+                      )
                     ),
                   ],
                 ),
@@ -120,7 +110,7 @@ class _HomeState extends State<HomeBuyer> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductSearchPage()));
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,

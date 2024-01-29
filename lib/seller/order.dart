@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:selaa/buyer/home_buyer.dart';
 import 'package:selaa/buyer/notification.dart';
+import 'package:selaa/register/redirect_login.dart';
 import 'package:selaa/seller/user_page.dart';
 
 class OrderPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _OrderPageState extends State<OrderPage> {
   Color finishedOrderButtonTextColor = const Color(0xFF415B5B);
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    const HomeBuyer(),
+    const RedirectLogin(),
     const UserPage(),
     const NotificationPage(),
     const OrderPage(),

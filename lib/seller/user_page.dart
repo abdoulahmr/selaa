@@ -6,7 +6,7 @@ import 'package:selaa/seller/edit_profile.dart';
 import 'package:selaa/seller/home_seller.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/product_page.dart';
-import 'package:selaa/seller/shopping_cart.dart';
+import 'package:selaa/buyer/shopping_cart.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/notification.dart';
-import 'package:selaa/seller/shopping_cart.dart';
+import 'package:selaa/buyer/shopping_cart.dart';
 import 'package:selaa/seller/user_page.dart';
 import 'package:selaa/settings/seller_option_menu.dart';
 

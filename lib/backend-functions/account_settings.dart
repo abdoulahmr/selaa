@@ -27,7 +27,7 @@ Future<void> resetPassword(String email, context) async {
     // Handle errors
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error sending password reset email please send us a feedback'),
+        content: Text('Error sending password reset email please send us a feedback code: 1'),
       ),
     );
   }
@@ -69,7 +69,7 @@ Future<void> updateUserInfo(
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Error updating user information: $error'),
+        content: Text('Error updating user information: $error code: 2'),
       ),
     );
   }
@@ -94,14 +94,14 @@ Future<void> updateUserShippingAddress(String shippingAddress, context) async {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback code: 3'),
         ),
       );
     }
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback code: 4'),
       ),
     );
   }
@@ -130,14 +130,14 @@ Future<void> updateUserPhoneNumber(String phoneNumber, context) async {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback code: 5'),
         ),
       );
     }
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback code: 6'),
       ),
     );
   }
@@ -156,7 +156,7 @@ Future<void> updatePassword(String currentPassword, String newPassword, context)
     // Check the specific error and provide a more user-friendly message
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Please check your current password and try again.'),
+        content: Text('Please check your current password and try again. code: 7'),
       ),
     );
     return;
@@ -176,7 +176,7 @@ Future<void> updatePassword(String currentPassword, String newPassword, context)
     // Check the specific error and provide a more user-friendly message
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Please try again or send us feedback if the issue persists.'),
+        content: Text('Please try again or send us feedback if the issue persists. code: 8'),
       ),
     );
   }

@@ -41,7 +41,7 @@ Future<List<Map<String, dynamic>>> loadUserInfo(context) async {
         // Handle case when document does not exist
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error please send us a feedback'),
+            content: Text('Error please send us a feedback  code 28'),
           ),
         );
         return [];
@@ -50,7 +50,7 @@ Future<List<Map<String, dynamic>>> loadUserInfo(context) async {
       // Handle errors
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error please send us a feedback'),
+            content: Text('Error please send us a feedback code 29'),
           ),
         );
       return [];
@@ -59,7 +59,7 @@ Future<List<Map<String, dynamic>>> loadUserInfo(context) async {
     // Handle case when user is null
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 30'),
       ),
     );
     return [];
@@ -79,7 +79,7 @@ Future loadProfilePicture(context) async {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error please send us a feedback'),
+            content: Text('Error please send us a feedback  code 31'),
           ),
         );
         return '';
@@ -87,7 +87,7 @@ Future loadProfilePicture(context) async {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback  code 32'),
         ),
       ); 
       return '';   
@@ -109,7 +109,7 @@ Future<List<Map<String, dynamic>>> loadSellerInfo(uid, context) async {
       // Handle case when document does not exist
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback  code 33'),
         ),
       );
       return [];
@@ -118,7 +118,7 @@ Future<List<Map<String, dynamic>>> loadSellerInfo(uid, context) async {
     // Handle errors
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 34'),
       ),
     );
     return [];
@@ -151,7 +151,6 @@ Future<List<Map<String, dynamic>>> loadUserPostes() async {
       result.add(productData);
     }
   }
-
   return result;
 }
 
@@ -182,7 +181,7 @@ Future<List<Map<String, dynamic>>> loadPosteInfo(String productID, context) asyn
       // Handle case when product document does not exist
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error loading product. Please send us feedback.'),
+          content: Text('Error loading product. Please send us feedback.  code 35'),
         ),
       );
       return [];
@@ -191,7 +190,7 @@ Future<List<Map<String, dynamic>>> loadPosteInfo(String productID, context) asyn
     // Handle errors
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 36'),
       ),
     );
     return [];
@@ -211,7 +210,7 @@ Future<List<Map<String, dynamic>>> loadAllPostes(context) async {
     // Handle errors
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 37'),
       ),
     );
     return [];
@@ -256,7 +255,7 @@ Future<List<Map<String, dynamic>>> loadCartItems(context) async {
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Error please send us a feedback'),
+                content: Text('Error please send us a feedback  code 38'),
               ),
             );
             return null;
@@ -264,7 +263,7 @@ Future<List<Map<String, dynamic>>> loadCartItems(context) async {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Error please send us a feedback'),
+              content: Text('Error please send us a feedback  code 39'),
             ),
           );
           return null;
@@ -274,7 +273,7 @@ Future<List<Map<String, dynamic>>> loadCartItems(context) async {
       // Handle any errors that may occur during the process
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback  code 40'),
         ),
       );
     }
@@ -282,7 +281,7 @@ Future<List<Map<String, dynamic>>> loadCartItems(context) async {
     // Handle case when user is null
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 41'),
       ),
     );
   }
@@ -306,7 +305,7 @@ Future<String> getUserShippingAddress(context) async {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error please send us a feedback'),
+            content: Text('Error please send us a feedback  code 42'),
           ),
         );
         return 'User document does not exist.';
@@ -314,7 +313,7 @@ Future<String> getUserShippingAddress(context) async {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback  code 43'),
         ),
       );
       return 'Error getting user shipping address.';
@@ -322,13 +321,12 @@ Future<String> getUserShippingAddress(context) async {
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 44'),
       ),
     );
     return 'User not authenticated.';
   }
 }
-
 
 // Function to get user phone number
 Future<String> getUserPhoneNumber(context) async {
@@ -345,7 +343,7 @@ Future<String> getUserPhoneNumber(context) async {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error please send us a feedback'),
+            content: Text('Error please send us a feedback  code 45'),
           ),
         );
         return 'User document does not exist.';
@@ -353,7 +351,7 @@ Future<String> getUserPhoneNumber(context) async {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback  code 46'),
         ),
       );
       return 'Error getting user phone number.';
@@ -361,9 +359,41 @@ Future<String> getUserPhoneNumber(context) async {
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code 47'),
       ),
     );
     return 'User not authenticated.';
   }
 }
+
+// Load user orders
+Future<Map<String, List<Map<String, dynamic>>>> loadUserOrders(BuildContext context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  try {
+    // Fetch orders collection for the current user
+    QuerySnapshot<Map<String, dynamic>> ordersSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('orders')
+        .get();
+
+    // Convert the QuerySnapshot to a List<Map<String, dynamic>>
+    List<Map<String, dynamic>> ordersList = ordersSnapshot.docs.map((doc) => doc.data()).toList();
+
+    // Group orders by date
+    Map<String, List<Map<String, dynamic>>> groupedOrders = {};
+
+    for (Map<String, dynamic> order in ordersList) {
+      String orderDate = order['date']; // Assuming 'date' is the key for the date field
+      groupedOrders.putIfAbsent(orderDate, () => []);
+      groupedOrders[orderDate]!.add(order);
+    }
+
+    return groupedOrders;
+  } catch (error) {
+    // Handle errors, show a Snackbar, and print the error to the console
+    return {};
+  }
+}
+

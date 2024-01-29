@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
+import 'package:selaa/buyer/my_orders.dart';
 import 'package:selaa/seller/user_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
@@ -78,7 +79,7 @@ Future<void> addProduct(
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Error adding post: $error'),
+        content: Text('Error adding post: $error code: 20'),
       ),
     );
   }
@@ -120,16 +121,23 @@ Future<void> deletePoste(String productID, context) async {
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error deleting post please send us a feedback'),
+        content: Text('Error deleting post please send us a feedback  code: 21'),
       ),
     );
   }
 }
 
 // add to cart
-Future<void> addItemToCart(String sellerID, String productID, int quantityValue, int price, context) async {
+Future<void> addItemToCart(
+  String sellerID, 
+  String productID, 
+  int quantityValue, 
+  String price, 
+  context
+) async {
+
   User? user = FirebaseAuth.instance.currentUser;
-  int totalPrice = price * quantityValue;
+  int totalPrice = int.parse(price) * quantityValue;
   if (user != null) {
     try {
       // Check if the product already exists in the user's cart
@@ -163,7 +171,7 @@ Future<void> addItemToCart(String sellerID, String productID, int quantityValue,
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error adding to cart please send us a feedback'),
+          content: Text('Error adding to cart please send us a feedback code: 22'),
         ),
       );
     }
@@ -172,9 +180,9 @@ Future<void> addItemToCart(String sellerID, String productID, int quantityValue,
 
 
 // calculate total price
-Future<int> calculateTotalPrice(context) async {
+Future<double> calculateTotalPrice(context) async {
   User? user = FirebaseAuth.instance.currentUser;
-  int total = 0;
+  double total = 0;
   if (user != null) {
     try {
       // Fetch user cart items from Firestore
@@ -197,7 +205,7 @@ Future<int> calculateTotalPrice(context) async {
       // Handle any errors that may occur during the process
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error please send us a feedback'),
+          content: Text('Error please send us a feedback  code: 23'),
         ),
       );
     }
@@ -205,7 +213,7 @@ Future<int> calculateTotalPrice(context) async {
     // Handle case when the user is null
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code: 24'),
       ),
     );
   }
@@ -230,7 +238,104 @@ Future<void> deleteItemFromCart(String productID, context) async {
     // Handle errors
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback'),
+        content: Text('Error please send us a feedback  code: 25'),
+      ),
+    );
+  }
+}
+
+// pass an order
+Future<void> saveOrder(
+  String productName,
+  String productID,
+  String sellerID,
+  int quantity,
+  double unitPrice,
+  String location,
+  String date,
+  context
+) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    // Handle the case where the user is null (not signed in)
+    return;
+  }
+  try {
+    //Save order for the buyer
+    await FirebaseFirestore.instance.collection('users')
+      .doc(user.uid)
+      .collection("orders")
+      .add({
+        "orderId": sellerID+user.uid+productID+date,
+        "productId": productID,
+        "productName": productName,
+        "sellerID": sellerID,
+        "buyerID": user.uid,
+        "quantity": quantity,
+        "unitPrice": unitPrice,
+        "date": date,
+        "location": location,
+        "status": "pending"
+      });
+    //Save order for the seller
+    await FirebaseFirestore.instance.collection('users')
+      .doc(sellerID)
+      .collection("orders")
+      .add({
+        "orderId": sellerID+user.uid+productID+date,
+        "productId": productID,
+        "productName": productName,
+        "sellerID": sellerID,
+        "buyerID": user.uid,
+        "quantity": quantity,
+        "unitPrice": unitPrice,
+        "date": date,
+        "location": location,
+        "status": "pending"
+      });
+    deleteItemFromCart(productID,context);
+    double orderAmount = unitPrice * quantity;
+    updateBalance(orderAmount, context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Order passed successfully'),
+      ),
+    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrdersPage()));
+  } catch (error) {
+    // Handle the error
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code: 26'),
+      ),
+    );
+  }
+}
+
+// Function to update the user's balance
+Future<void> updateBalance(double orderAmount, context) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  try {
+    // Fetch the current balance
+    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+
+    if (userSnapshot.exists) {
+      // Update the balance by subtracting the order amount
+      double currentBalance = userSnapshot['balance'].toDouble();
+      double newBalance = currentBalance - orderAmount;
+
+      // Save the updated balance to Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({'balance': newBalance});
+    }
+  } catch (error) {
+    // Handle the error
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code: 27'),
       ),
     );
   }
