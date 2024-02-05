@@ -26,7 +26,7 @@ class Main extends StatelessWidget {
             if (snapshot.hasData) {
               return const RedirectLogin();
             } else {
-              return const PreRegister();
+              return PreRegister();
             }            
           }
         },

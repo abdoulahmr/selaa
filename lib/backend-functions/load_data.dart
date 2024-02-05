@@ -397,3 +397,31 @@ Future<Map<String, List<Map<String, dynamic>>>> loadUserOrders(BuildContext cont
   }
 }
 
+Future<List<String>> getAllOrderIDs() async {
+  List<String> orderIDs = [];
+  User? user = FirebaseAuth.instance.currentUser;
+
+  try {
+    QuerySnapshot<Map<String, dynamic>> ordersSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('orders')
+        .get();
+
+    // Iterate through each document and add unique orderIDs to the set
+    Set<String> uniqueOrderIDs = Set<String>();
+    ordersSnapshot.docs.forEach((doc) {
+      if (doc.data().containsKey('orderID')) {
+        uniqueOrderIDs.add(doc['orderID']);
+      }
+    });
+
+    // Convert the set to a list
+    orderIDs = uniqueOrderIDs.toList();
+  } catch (e) {
+    print('Error fetching orderIDs: $e');
+    // Handle the error accordingly
+  }
+
+  return orderIDs;
+}

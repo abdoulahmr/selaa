@@ -249,6 +249,7 @@ Future<void> saveOrder(
   String productName,
   String productID,
   String sellerID,
+  String orderID,
   int quantity,
   double unitPrice,
   String location,
@@ -266,7 +267,7 @@ Future<void> saveOrder(
       .doc(user.uid)
       .collection("orders")
       .add({
-        "orderId": sellerID+user.uid+productID+date,
+        "orderId": orderID,
         "productId": productID,
         "productName": productName,
         "sellerID": sellerID,
@@ -282,7 +283,7 @@ Future<void> saveOrder(
       .doc(sellerID)
       .collection("orders")
       .add({
-        "orderId": sellerID+user.uid+productID+date,
+        "orderId": orderID,
         "productId": productID,
         "productName": productName,
         "sellerID": sellerID,

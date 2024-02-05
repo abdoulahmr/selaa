@@ -19,7 +19,6 @@ class _ProductPageState extends State<ProductPage> {
   List posteInfo = [];
   int quantityValue = 1;
 
-
  @override
   void initState() {
     super.initState();
@@ -37,242 +36,249 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 30, top: 20),
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.arrowLeft),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Visibility(
-                    visible: posteInfo.isNotEmpty && FirebaseAuth.instance.currentUser?.uid == posteInfo[0]['userId'],
-                    child: IconButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.trash,
-                        color: Colors.red,
-                      ),
+      body: WillPopScope(
+        onWillPop: ()async{return false;},
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 30, top: 20),
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.arrowLeft),
                       onPressed: () {
-                        deletePoste(widget.productID, context);
+                        Navigator.pop(context);
                       },
                     ),
-                  ),
-                ],
-              )
-            ),
-            Container(
-              margin: const EdgeInsets.only(left:20, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: userInfo.isNotEmpty && userInfo[0]['profilePicture'] != null
-                        ? NetworkImage(userInfo[0]['profilePicture'])
-                        : const NetworkImage(
-                            'https://firebasestorage.googleapis.com/v0/b/selaa-2ff93.appspot.com/o/profilePicture%2Fkisspng-computer-icons-download-avatar-5b3848b5343f86.741661901530415285214-removebg-preview%20(1).png?alt=media&token=0c01bbf5-f998-4ad9-af94-235ba6fd4ab5',
-                          ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: Text(
-                      userInfo.isNotEmpty ? userInfo[0]['username'] ?? '' : '',
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                    // bug
+                    Visibility(
+                      visible: posteInfo.isNotEmpty && FirebaseAuth.instance.currentUser?.uid == posteInfo[0]['userId'],
+                      child: IconButton(
+                        icon: const FaIcon(
+                          FontAwesomeIcons.trash,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          deletePoste(widget.productID, context);
+                        },
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              decoration: const BoxDecoration(color: Color(0xFFF2F4F4)),
-              child: posteInfo.isNotEmpty && posteInfo[0]['imageUrls'] != null
-                ? SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: PageView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: posteInfo[0]['imageUrls'].length,
-                    itemBuilder: (context, index) {
-                      return Image.network(posteInfo[0]['imageUrls'][index]);
-                    },
-                  ),
+                  ],
                 )
-                : const Text('No images available'),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  posteInfo.isNotEmpty ? posteInfo[0]['title'] ?? '' : '',
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                posteInfo.isNotEmpty ? posteInfo[1]['name'] : '',
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width * 0.8,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF2F4F4),
-                borderRadius: const  BorderRadius.all(Radius.circular(10.0)),
-                border: Border.all(
-                  color: const Color(0xFF001A1A),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Description",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color(0xFF008080),
+              Container(
+                margin: const EdgeInsets.only(left:20, top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: userInfo.isNotEmpty && userInfo[0]['profilePicture'] != null
+                          ? NetworkImage(userInfo[0]['profilePicture'])
+                          : const NetworkImage(
+                              'https://firebasestorage.googleapis.com/v0/b/selaa-2ff93.appspot.com/o/profilePicture%2Fkisspng-computer-icons-download-avatar-5b3848b5343f86.741661901530415285214-removebg-preview%20(1).png?alt=media&token=0c01bbf5-f998-4ad9-af94-235ba6fd4ab5',
+                            ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    posteInfo.isNotEmpty ? posteInfo[0]['description'] ?? '' : '',
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text(
+                        userInfo.isNotEmpty ? userInfo[0]['username'] ?? '' : '',
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: const BoxDecoration(color: Color(0xFFF2F4F4)),
+                child: posteInfo.isNotEmpty && posteInfo[0]['imageUrls'] != null
+                  ? SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: PageView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: posteInfo[0]['imageUrls'].length,
+                      itemBuilder: (context, index) {
+                        return Image.network(posteInfo[0]['imageUrls'][index]);
+                      },
+                    ),
+                  )
+                  : const Text('No images available'),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    posteInfo.isNotEmpty ? posteInfo[0]['title'] ?? '' : '',
                     textAlign: TextAlign.start,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width * 0.8,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF2F4F4),
-                borderRadius: const  BorderRadius.all(Radius.circular(10.0)),
-                border: Border.all(
-                  color: const Color(0xFF001A1A),
                 ),
               ),
-              child: Text(
-                posteInfo.isNotEmpty ? "${posteInfo[0]['price']} DZ" : '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width * 0.8,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF2F4F4),
-                borderRadius: const  BorderRadius.all(Radius.circular(10.0)),
-                border: Border.all(
-                  color: const Color(0xFF001A1A),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    // ignore: deprecated_member_use
-                    FontAwesomeIcons.mapMarkerAlt,
-                    color: Color(0xFF008080),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    posteInfo.isNotEmpty ? posteInfo[0]['location'] : '',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              )
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Visibility(
-                  visible: posteInfo.isNotEmpty && FirebaseAuth.instance.currentUser?.uid != posteInfo[0]['userId'],
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all(
-                        Size(
-                          MediaQuery.of(context).size.width * 0.35,
-                          MediaQuery.of(context).size.height * 0.06,
-                        ),
-                      ),
-                      backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          side: const BorderSide(color: Color(0xFF415B5B)),
-                        ),
-                      ),
-                    ),
-                    child: const Text('Add to cart'),
-                    onPressed: () async {
-                      addItemToCart(
-                        posteInfo[0]['sellerID'], 
-                        widget.productID, 
-                        quantityValue,
-                        posteInfo[0]['price'],
-                        context
-                      );
-                    }
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Text(
+                  posteInfo.isNotEmpty ? posteInfo[1]['name'] : '',
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 16,
                   ),
                 ),
-                QuantityInput(
-                  value: quantityValue,
-                  minValue: 1,
-                  buttonColor: const Color(0xFF008080),
-                  decoration: const InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF2F4F4),
+                  borderRadius: const  BorderRadius.all(Radius.circular(10.0)),
+                  border: Border.all(
+                    color: const Color(0xFF001A1A),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Description",
+                      style: TextStyle(
+                        fontSize: 20,
                         color: Color(0xFF008080),
                       ),
                     ),
-                  ),
-                  onChanged: (value) => setState(() => quantityValue = int.parse(value.replaceAll(',', '')))
+                    const SizedBox(height: 10),
+                    Text(
+                      posteInfo.isNotEmpty ? posteInfo[0]['description'] ?? '' : '',
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 30),
-          ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF2F4F4),
+                  borderRadius: const  BorderRadius.all(Radius.circular(10.0)),
+                  border: Border.all(
+                    color: const Color(0xFF001A1A),
+                  ),
+                ),
+                child: Text(
+                  posteInfo.isNotEmpty ? "${posteInfo[0]['price']} DZ" : '',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF2F4F4),
+                  borderRadius: const  BorderRadius.all(Radius.circular(10.0)),
+                  border: Border.all(
+                    color: const Color(0xFF001A1A),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      // ignore: deprecated_member_use
+                      FontAwesomeIcons.mapMarkerAlt,
+                      color: Color(0xFF008080),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      posteInfo.isNotEmpty ? posteInfo[0]['location'] : '',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Visibility(
+                    visible: posteInfo.isNotEmpty && FirebaseAuth.instance.currentUser?.uid != posteInfo[0]['userId'],
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(
+                          Size(
+                            MediaQuery.of(context).size.width * 0.35,
+                            MediaQuery.of(context).size.height * 0.06,
+                          ),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: const BorderSide(color: Color(0xFF415B5B)),
+                          ),
+                        ),
+                      ),
+                      child: const Text('Add to cart'),
+                      onPressed: () async {
+                        addItemToCart(
+                          posteInfo[0]['sellerID'], 
+                          widget.productID, 
+                          quantityValue,
+                          posteInfo[0]['price'],
+                          context
+                        );
+                      }
+                    ),
+                  ),
+                  QuantityInput(
+                    value: quantityValue,
+                    minValue: 1,
+                    maxValue: 10000,
+                    readOnly: true,
+                    acceptsZero: false,
+                    acceptsNegatives: false,
+                    buttonColor: const Color(0xFF008080),
+                    decoration: const InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF008080),
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) => setState(() => quantityValue = int.parse(value.replaceAll(',', '')))
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );

@@ -42,63 +42,66 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(height: 40.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1,
-                child: IconButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Color(0xFF415B5B),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: MediaQuery.of(context).size.height * 0.06,
-                child: TextFormField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search for a product',
-                    suffixIcon: const Icon(
-                      Icons.search,
+      body: WillPopScope(
+        onWillPop: ()async{return false;},
+        child: Column(
+          children: [
+            const SizedBox(height: 40.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.1,
+                  child: IconButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
                       color: Color(0xFF415B5B),
                     ),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFF415B5B)),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
                   ),
-                  onChanged: (query) {
-                    _performSearch(query);
-                  },
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_searchResults[index]['title']),
-                  subtitle: Text(_searchResults[index]['price']+" DZ"),
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(productID: _searchResults[index]['productID'])));
-                  },
-                );
-              },
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  child: TextFormField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search for a product',
+                      suffixIcon: const Icon(
+                        Icons.search,
+                        color: Color(0xFF415B5B),
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFF415B5B)),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    onChanged: (query) {
+                      _performSearch(query);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: _searchResults.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_searchResults[index]['title']),
+                    subtitle: Text(_searchResults[index]['price']+" DZ"),
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(productID: _searchResults[index]['productID'])));
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
