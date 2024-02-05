@@ -22,7 +22,7 @@ class ChoiceAuthPage extends StatelessWidget {
                   height: MediaQuery.of(context).size.height -
                       (MediaQuery.of(context).size.height * 0.3),
                   decoration: const BoxDecoration(
-                    color: Color(0xFFCCE6E6),
+                    color: Color(0xFF66D6E4),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(60.0),
                       bottomRight: Radius.circular(60.0),
@@ -63,7 +63,7 @@ class ChoiceAuthPage extends StatelessWidget {
                       fixedSize: MaterialStateProperty.all(
                         Size(MediaQuery.of(context).size.width*0.8, MediaQuery.of(context).size.height*0.07),
                       ),
-                      backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                      backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),

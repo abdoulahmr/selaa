@@ -1,12 +1,12 @@
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/seller/add_poste.dart';
 import 'package:selaa/seller/edit_profile.dart';
 import 'package:selaa/seller/home_seller.dart';
 import 'package:selaa/buyer/notification.dart';
+import 'package:selaa/seller/order.dart';
 import 'package:selaa/seller/product_page.dart';
-import 'package:selaa/buyer/shopping_cart.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -18,12 +18,11 @@ class UserPage extends StatefulWidget {
 class _UserPage extends State<UserPage> {
   List<Map<String, dynamic>> userInfo = [];
   List<Map<String, dynamic>> userPostes = [];
-  int _currentIndex = 0;
   final List<Widget> _pages = [
     const HomeSeller(),
     const UserPage(),
     const NotificationPage(),
-    const ShoppingCart(),
+    const OrderPage(),
   ];
 
   @override
@@ -51,23 +50,13 @@ class _UserPage extends State<UserPage> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  color: Color(0xFFCCE6E6),
+                  color: Color(0xFF66D6E4),
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: const EdgeInsets.only(top: 50, left: 30),
-                      child: IconButton(
-                        icon: const FaIcon(FontAwesomeIcons.arrowLeft),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
                     if (userInfo.isNotEmpty)
                       Container(
-                        margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                        margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 50),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -167,11 +156,11 @@ class _UserPage extends State<UserPage> {
                             MediaQuery.of(context).size.height * 0.06,
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Color(0xFF415B5B)),
+                            side: const BorderSide(color: Color(0xFF0A1747)),
                           ),
                         ),
                       ),
@@ -195,11 +184,11 @@ class _UserPage extends State<UserPage> {
                             MediaQuery.of(context).size.height * 0.06,
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF008080)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Color(0xFF415B5B)),
+                            side: const BorderSide(color: Color(0xFF0A1747)),
                           ),
                         ),
                       ),
@@ -236,7 +225,7 @@ class _UserPage extends State<UserPage> {
                               margin: const EdgeInsets.all(10),
                               padding: const EdgeInsets.all(20),
                               decoration: const BoxDecoration(
-                                color: Color(0xFFCCE6E6),
+                                color: Color(0xFF66D6E4),
                                 borderRadius: BorderRadius.all(Radius.circular(60.0)),
                               ),
                               width: MediaQuery.of(context).size.width*0.8,
@@ -297,53 +286,27 @@ class _UserPage extends State<UserPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: const Color(0xFFCCE6E6),
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          selectedItemColor: const Color(0xFF008080),
-          unselectedItemColor: const Color(0xFF008080),
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => _pages[index]),
-            );
+      bottomNavigationBar:Container(
+        decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Colors.grey, width: 0.5), // Add top border
+            ),
+          ),
+        child: FloatingNavbar(
+          selectedItemColor: const Color(0xFF0A1747),
+          unselectedItemColor: const Color(0xFF66D6E4),
+          backgroundColor: Colors.white,
+          onTap: (int val) {
+            if(val != 1){
+              Navigator.push(context,MaterialPageRoute(builder: (context) => _pages[val]));
+            }
           },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                size: 35,
-              ),
-              label: "Home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.account_circle,
-                size: 35,
-              ),
-              label: "Profile",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.notifications_active,
-                size: 35,
-              ),
-              label: "Notification",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.shopping_cart_outlined,
-                size: 35,
-              ),
-              label: "Cart",
-            ),
+          currentIndex: 1,
+          items: [
+            FloatingNavbarItem(icon: Icons.home, title: 'Home'),
+            FloatingNavbarItem(icon: Icons.account_circle, title: 'Profile'),
+            FloatingNavbarItem(icon: Icons.notifications, title: 'Notifications'),
+            FloatingNavbarItem(icon: Icons.all_inbox, title: 'Orders'),
           ],
         ),
       ),

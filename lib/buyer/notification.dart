@@ -1,4 +1,8 @@
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:selaa/seller/home_seller.dart';
+import 'package:selaa/seller/order.dart';
+import 'package:selaa/seller/user_page.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -8,8 +12,43 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  final List<Widget> _pages = [
+    const HomeSeller(),
+    const UserPage(),
+    const NotificationPage(),
+    const OrderPage(),
+  ];
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Scaffold(
+      body: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+      bottomNavigationBar:Container(
+        decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Colors.grey, width: 0.5),
+            ),
+          ),
+        child: FloatingNavbar(
+          selectedItemColor: const Color(0xFF0A1747),
+          unselectedItemColor: const Color(0xFF66D6E4),
+          backgroundColor: Colors.white,
+          onTap: (int val) {
+            if(val != 1){
+              Navigator.push(context,MaterialPageRoute(builder: (context) => _pages[val]));
+            }
+          },
+          currentIndex: 2,
+          items: [
+            FloatingNavbarItem(icon: Icons.home, title: 'Home'),
+            FloatingNavbarItem(icon: Icons.account_circle, title: 'Profile'),
+            FloatingNavbarItem(icon: Icons.notifications, title: 'Notifications'),
+            FloatingNavbarItem(icon: Icons.all_inbox, title: 'Orders'),
+          ],
+        ),
+      ),
+    );
   }
 }

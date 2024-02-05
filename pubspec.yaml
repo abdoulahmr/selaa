@@ -46,6 +46,7 @@ dependencies:
   uuid: ^4.2.2
   connectivity: ^3.0.6
   dots_indicator: ^3.0.0
+  floating_bottom_navigation_bar: ^1.5.2
 
 dev_dependencies:
   flutter_test:
