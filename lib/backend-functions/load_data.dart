@@ -366,62 +366,33 @@ Future<String> getUserPhoneNumber(context) async {
   }
 }
 
-// Load user orders
-Future<Map<String, List<Map<String, dynamic>>>> loadUserOrders(BuildContext context) async {
-  User? user = FirebaseAuth.instance.currentUser;
-
+Future<List<Map<String, dynamic>>> loadUserOrders(context) async {
   try {
-    // Fetch orders collection for the current user
-    QuerySnapshot<Map<String, dynamic>> ordersSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .collection('orders')
-        .get();
+    User? user = FirebaseAuth.instance.currentUser;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user!.uid)
+      .collection('orders')
+      .get();
 
-    // Convert the QuerySnapshot to a List<Map<String, dynamic>>
-    List<Map<String, dynamic>> ordersList = ordersSnapshot.docs.map((doc) => doc.data()).toList();
-
-    // Group orders by date
-    Map<String, List<Map<String, dynamic>>> groupedOrders = {};
-
-    for (Map<String, dynamic> order in ordersList) {
-      String orderDate = order['date']; // Assuming 'date' is the key for the date field
-      groupedOrders.putIfAbsent(orderDate, () => []);
-      groupedOrders[orderDate]!.add(order);
-    }
-
-    return groupedOrders;
-  } catch (error) {
-    // Handle errors, show a Snackbar, and print the error to the console
-    return {};
-  }
-}
-
-Future<List<String>> getAllOrderIDs() async {
-  List<String> orderIDs = [];
-  User? user = FirebaseAuth.instance.currentUser;
-
-  try {
-    QuerySnapshot<Map<String, dynamic>> ordersSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .collection('orders')
-        .get();
-
-    // Iterate through each document and add unique orderIDs to the set
-    Set<String> uniqueOrderIDs = Set<String>();
-    ordersSnapshot.docs.forEach((doc) {
-      if (doc.data().containsKey('orderID')) {
-        uniqueOrderIDs.add(doc['orderID']);
+    List<Map<String, dynamic>> orders = [];
+    for (var doc in querySnapshot.docs) {
+      Map<String, dynamic> orderData = {
+        'orderId': doc['orderId'],
+        'date': doc['date'],
+        'status': doc['status']
+      };
+      if (!orders.any((order) => order['orderId'] == doc['orderId'])) {
+        orders.add(orderData);
       }
-    });
-
-    // Convert the set to a list
-    orderIDs = uniqueOrderIDs.toList();
+    }
+    return orders;
   } catch (e) {
-    print('Error fetching orderIDs: $e');
-    // Handle the error accordingly
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code 48'),
+      ),
+    );
+    return []; 
   }
-
-  return orderIDs;
 }

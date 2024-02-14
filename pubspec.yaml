@@ -47,6 +47,7 @@ dependencies:
   connectivity: ^3.0.6
   dots_indicator: ^3.0.0
   floating_bottom_navigation_bar: ^1.5.2
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

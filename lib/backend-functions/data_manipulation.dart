@@ -302,7 +302,7 @@ Future<void> saveOrder(
         content: Text('Order passed successfully'),
       ),
     );
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrdersPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const MyOrdersPage()));
   } catch (error) {
     // Handle the error
     ScaffoldMessenger.of(context).showSnackBar(
