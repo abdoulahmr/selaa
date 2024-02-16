@@ -48,7 +48,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         userInfo = info;
       });
     });
-    getUserShippingAddress(context).then((String adress){
+    loadUserShippingAddress(context).then((String adress){
       setState(() {
         shippingAdress = adress;
       });

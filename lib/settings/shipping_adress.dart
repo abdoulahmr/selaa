@@ -18,7 +18,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
   @override
   void initState() { 
     super.initState();
-    getUserShippingAddress(context).then((String data) {
+    loadUserShippingAddress(context).then((String data) {
       setState(() {
         userAddress = data;
       });

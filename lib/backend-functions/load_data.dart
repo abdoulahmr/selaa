@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // Function to get account type (buyer,seller)
-Future<String?> getAccountType() async {
+Future<String?> loadAccountType() async {
   try {
     // Get the current user from FirebaseAuth
     User? user = FirebaseAuth.instance.currentUser;
@@ -289,7 +289,7 @@ Future<List<Map<String, dynamic>>> loadCartItems(context) async {
 }
 
 // Function to get user shipping address
-Future<String> getUserShippingAddress(context) async {
+Future<String> loadUserShippingAddress(context) async {
   User? user = FirebaseAuth.instance.currentUser;
 
   if (user != null) {
@@ -329,7 +329,7 @@ Future<String> getUserShippingAddress(context) async {
 }
 
 // Function to get user phone number
-Future<String> getUserPhoneNumber(context) async {
+Future<String> loadUserPhoneNumber(context) async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user != null) {
     try {
@@ -395,4 +395,22 @@ Future<List<Map<String, dynamic>>> loadUserOrders(context) async {
     );
     return []; 
   }
+}
+
+// load order items
+Future<List<Map<String, dynamic>>> loadOrderItems(context, orderId) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user!.uid)
+      .collection('orders')
+      .where('orderId', isEqualTo: orderId) // Filter by orderId
+      .get();
+
+  List<Map<String, dynamic>> orderItems = [];
+  for (var doc in querySnapshot.docs) {
+    orderItems.add(doc.data()as Map<String, dynamic>);
+  }
+
+  return orderItems;
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
+import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/my_orders.dart';
 import 'package:selaa/seller/user_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -262,7 +263,17 @@ Future<void> saveOrder(
     return;
   }
   try {
-    //Save order for the buyer
+    String shippingAddress = await loadUserShippingAddress(context);
+    if (shippingAddress.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please add a shipping address before placing an order.'),
+        ),
+      );
+      return;
+    }
+
+    // Save order for the buyer
     await FirebaseFirestore.instance.collection('users')
       .doc(user.uid)
       .collection("orders")
@@ -278,7 +289,8 @@ Future<void> saveOrder(
         "location": location,
         "status": "pending"
       });
-    //Save order for the seller
+
+    // Save order for the seller
     await FirebaseFirestore.instance.collection('users')
       .doc(sellerID)
       .collection("orders")
@@ -294,7 +306,8 @@ Future<void> saveOrder(
         "location": location,
         "status": "pending"
       });
-    deleteItemFromCart(productID,context);
+
+    deleteItemFromCart(productID, context);
     double orderAmount = unitPrice * quantity;
     updateBalance(orderAmount, context);
     ScaffoldMessenger.of(context).showSnackBar(

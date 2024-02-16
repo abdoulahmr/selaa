@@ -16,7 +16,7 @@ class _PreLoginState extends State<RedirectLogin> {
   @override
   void initState() {
     super.initState();
-    getAccountType().then((String? data) {
+    loadAccountType().then((String? data) {
       if (data != null) {
         setState(() {
           userType = data;

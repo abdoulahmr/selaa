@@ -17,7 +17,7 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
 
   @override
   void initState() {
-    getUserPhoneNumber(context).then((value) {
+    loadUserPhoneNumber(context).then((value) {
       setState(() {
         _phoneNumberController.text = value;
       });
