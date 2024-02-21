@@ -4,13 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:selaa/register/redirect_login.dart';
 import 'package:selaa/register/pre_register.dart';
 import 'firebase_options.dart';
-//import 'firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // FirebaseApi firebaseApi = FirebaseApi();
-  // await firebaseApi.initNotifications();
   runApp(const Main());
 }
 

@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:selaa/register/choice_auth.dart';
@@ -29,6 +31,25 @@ class _PreRegisterPageState extends State<PreRegister> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          const SizedBox(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed:(){}, 
+                icon: const Icon(
+                  Icons.language, 
+                  color: Color(0xFF415B5B), 
+                  size: 30,
+                )
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+            ],
+          ),
           Expanded(
             child: PageView(
               controller: _pageController, // Use _pageController here
@@ -107,7 +128,6 @@ class _PreRegisterPageState extends State<PreRegister> {
 
 
 class Step1Widget extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
   const Step1Widget({Key? key});
 
   @override
