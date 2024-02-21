@@ -1,12 +1,12 @@
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/seller/add_poste.dart';
-import 'package:selaa/seller/edit_profile.dart';
-import 'package:selaa/seller/home_seller.dart';
-import 'package:selaa/buyer/notification.dart';
-import 'package:selaa/seller/order.dart';
-import 'package:selaa/seller/product_page.dart';
+import 'package:selaa/screens/seller/add_poste.dart';
+import 'package:selaa/screens/seller/edit_profile.dart';
+import 'package:selaa/screens/seller/home_seller.dart';
+import 'package:selaa/screens/buyer/notification.dart';
+import 'package:selaa/screens/seller/order.dart';
+import 'package:selaa/screens/seller/product_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);

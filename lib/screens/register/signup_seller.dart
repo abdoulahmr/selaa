@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:selaa/backend-functions/auth.dart';
-import 'package:selaa/register/login.dart';
-import 'package:selaa/register/pre_register.dart';
-import 'package:selaa/register/signup_buyer.dart';
+import 'package:selaa/screens/register/login.dart';
+import 'package:selaa/screens/register/pre_register.dart';
+import 'package:selaa/screens/register/signup_buyer.dart';
 
 class SignUpSeller extends StatefulWidget {
   const SignUpSeller({Key? key}) : super(key: key);

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/auth.dart';
-import 'package:selaa/register/redirect_login.dart';
-import 'package:selaa/buyer/notification.dart';
-import 'package:selaa/settings/settings_list.dart';
-import 'package:selaa/seller/user_page.dart';
+import 'package:selaa/screens/buyer/my_orders.dart';
+import 'package:selaa/screens/register/redirect_login.dart';
+import 'package:selaa/screens/settings/settings_list.dart';
 
-class OptionsMenu extends StatelessWidget {
-  const OptionsMenu({super.key});
+class BuyerOptionsMenu extends StatelessWidget {
+  const BuyerOptionsMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,36 +39,6 @@ class OptionsMenu extends StatelessWidget {
                       SizedBox(width: 40),
                       Text(
                         "Home",
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 30),
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const UserPage()),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                  child: const Row(
-                    children: <Widget>[
-                      SizedBox(width: 40),
-                      Icon(
-                        Icons.account_circle_outlined,
-                        size: 40,
-                        color: Color(0xFF008080),
-                      ),
-                      SizedBox(width: 40),
-                      Text(
-                        "Profile",
                         style: TextStyle(fontSize: 20, color: Colors.black),
                       ),
                     ],
@@ -133,35 +102,8 @@ class OptionsMenu extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: OutlinedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const NotificationPage()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrdersPage()));
                   },
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                  child: const Row(
-                    children: <Widget>[
-                      SizedBox(width: 40),
-                      Icon(
-                        Icons.notifications_outlined,
-                        size: 40,
-                        color: Color(0xFF008080),
-                      ),
-                      SizedBox(width: 40),
-                      Text(
-                        "Notifications",
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: OutlinedButton(
-                  onPressed: () {},
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.white),
                   ),
@@ -175,31 +117,7 @@ class OptionsMenu extends StatelessWidget {
                       ),
                       SizedBox(width: 40),
                       Text(
-                        "Delivery",
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                  child: const Row(
-                    children: <Widget>[
-                      SizedBox(width: 40),
-                      Icon(
-                        Icons.shopping_cart_outlined,
-                        size: 40,
-                        color: Color(0xFF008080),
-                      ),
-                      SizedBox(width: 40),
-                      Text(
-                        "Order",
+                        "My Orders",
                         style: TextStyle(fontSize: 20, color: Colors.black),
                       ),
                     ],

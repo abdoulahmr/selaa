@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/seller/product_page.dart';
+import 'package:selaa/screens/seller/product_page.dart';
 
 class ProductSearchPage extends StatefulWidget {
   const ProductSearchPage({super.key});

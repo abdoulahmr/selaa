@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/buyer/order_page.dart';
+import 'package:selaa/screens/buyer/order_page.dart';
 
 class MyOrdersPage extends StatelessWidget {
   const MyOrdersPage({Key? key}) : super(key: key);

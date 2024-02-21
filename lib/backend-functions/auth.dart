@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
-import 'package:selaa/register/redirect_login.dart';
-import '/register/login.dart';
+import 'package:selaa/screens/register/redirect_login.dart';
+import '../screens/register/login.dart';
 
 // Function to register a user with email and password (bute)
 Future<User?> registerWithEmailPassword({

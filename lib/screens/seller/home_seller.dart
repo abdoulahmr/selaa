@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/buyer/notification.dart';
-import 'package:selaa/seller/order.dart';
-import 'package:selaa/seller/user_page.dart';
-import 'package:selaa/settings/seller_option_menu.dart';
+import 'package:selaa/screens/buyer/notification.dart';
+import 'package:selaa/screens/seller/order.dart';
+import 'package:selaa/screens/seller/user_page.dart';
+import 'package:selaa/screens/settings/seller_option_menu.dart';
 
 class HomeSeller extends StatefulWidget {
   const HomeSeller({Key? key}) : super(key: key);

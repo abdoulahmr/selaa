@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:selaa/register/redirect_login.dart';
-import 'package:selaa/register/pre_register.dart';
+import 'package:selaa/screens/register/redirect_login.dart';
+import 'package:selaa/screens/register/pre_register.dart';
 import 'firebase_options.dart';
 import 'package:selaa/generated/l10n.dart';
 

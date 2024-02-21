@@ -1,8 +1,8 @@
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:selaa/seller/home_seller.dart';
-import 'package:selaa/seller/order.dart';
-import 'package:selaa/seller/user_page.dart';
+import 'package:selaa/screens/seller/home_seller.dart';
+import 'package:selaa/screens/seller/order.dart';
+import 'package:selaa/screens/seller/user_page.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);

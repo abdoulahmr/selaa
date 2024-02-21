@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/auth.dart';
-import '/register/login.dart';
-import '/seller/edit_profile.dart';
+import '../screens/register/login.dart';
+import '../screens/seller/edit_profile.dart';
 
 // Function to reset password
 Future<void> resetPassword(String email, context) async {

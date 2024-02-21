@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/buyer/my_orders.dart';
-import 'package:selaa/seller/user_page.dart';
+import 'package:selaa/screens/buyer/my_orders.dart';
+import 'package:selaa/screens/seller/user_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 

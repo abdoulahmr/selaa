@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:input_quantity/input_quantity.dart';
 
 import 'package:selaa/backend-functions/load_data.dart';
-import '../backend-functions/data_manipulation.dart';
+import '../../backend-functions/data_manipulation.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key, required this.productID}) : super(key: key);

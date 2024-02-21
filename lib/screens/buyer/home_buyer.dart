@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
-import 'package:selaa/buyer/notification.dart';
-import 'package:selaa/seller/product_page.dart';
-import 'package:selaa/buyer/shopping_cart.dart';
-import 'package:selaa/seller/user_page.dart';
-import 'package:selaa/buyer/product_search_list.dart';
-import 'package:selaa/settings/buyer_options_menu.dart';
+import 'package:selaa/screens/buyer/notification.dart';
+import 'package:selaa/screens/seller/product_page.dart';
+import 'package:selaa/screens/buyer/shopping_cart.dart';
+import 'package:selaa/screens/seller/user_page.dart';
+import 'package:selaa/screens/buyer/product_search_list.dart';
+import 'package:selaa/screens/settings/buyer_options_menu.dart';
 
 class HomeBuyer extends StatefulWidget {
   const HomeBuyer({Key? key}) : super(key: key);

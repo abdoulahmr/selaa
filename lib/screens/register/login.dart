@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:selaa/backend-functions/auth.dart';
-import 'package:selaa/register/signup_buyer.dart';
+import 'package:selaa/screens/register/signup_buyer.dart';
 import 'pre_register.dart';
 import 'forget_password.dart';
 

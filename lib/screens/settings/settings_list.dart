@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:selaa/settings/change_password.dart';
-import 'package:selaa/settings/phone_number.dart';
-import 'package:selaa/settings/shipping_adress.dart';
+import 'package:selaa/screens/settings/change_password.dart';
+import 'package:selaa/screens/settings/phone_number.dart';
+import 'package:selaa/screens/settings/shipping_adress.dart';
 
 class SettingsList extends StatelessWidget {
   const SettingsList({Key? key}) : super(key: key);

@@ -561,16 +561,24 @@ class S {
   }
 
   /// `Error`
-  String get Error {
+  String get error {
     return Intl.message(
       'Error',
-      name: 'Error',
+      name: 'error',
       desc: '',
       args: [],
     );
   }
 
-  // skipped getter for the 'Error uploading image' key
+  /// `Error occurred`
+  String get errorOccurred {
+    return Intl.message(
+      'Error occurred',
+      name: 'errorOccurred',
+      desc: '',
+      args: [],
+    );
+  }
 
   /// `Loading`
   String get loading {

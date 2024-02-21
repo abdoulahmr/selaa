@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:selaa/generated/l10n.dart';
-import 'package:selaa/register/signup_seller.dart';
+import 'package:selaa/screens/register/signup_seller.dart';
 import 'login.dart';
 import 'signup_buyer.dart';
 
