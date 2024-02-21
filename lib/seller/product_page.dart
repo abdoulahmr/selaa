@@ -1,7 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quantity_input/quantity_input.dart';
+import 'package:input_quantity/input_quantity.dart';
+
 import 'package:selaa/backend-functions/load_data.dart';
 import '../backend-functions/data_manipulation.dart';
 
@@ -208,7 +211,6 @@ class _ProductPageState extends State<ProductPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(
-                      // ignore: deprecated_member_use
                       FontAwesomeIcons.mapMarkerAlt,
                       color: Color(0xFF008080),
                     ),
@@ -257,22 +259,12 @@ class _ProductPageState extends State<ProductPage> {
                       }
                     ),
                   ),
-                  QuantityInput(
-                    value: quantityValue,
-                    minValue: 1,
-                    maxValue: 10000,
-                    readOnly: true,
-                    acceptsZero: false,
-                    acceptsNegatives: false,
-                    buttonColor: const Color(0xFF008080),
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF008080),
-                        ),
-                      ),
-                    ),
-                    onChanged: (value) => setState(() => quantityValue = int.parse(value.replaceAll(',', '')))
+                  InputQty(
+                    maxVal: 10000,
+                    initVal: 1,
+                    minVal: 1,
+                    steps: 1,
+                    onQtyChanged: (value) => setState(() => quantityValue = int.parse(value.replaceAll(',', '')))
                   ),
                 ],
               ),

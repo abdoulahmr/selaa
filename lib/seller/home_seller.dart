@@ -346,7 +346,6 @@ class _HomeState extends State<HomeSeller> {
             setState(() {
               _currentIndex = index;
             });
-            // You can use Navigator to navigate to other screens
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => _pages[index]),

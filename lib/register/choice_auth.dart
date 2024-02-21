@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:selaa/generated/l10n.dart';
 import 'package:selaa/register/signup_seller.dart';
 import 'login.dart';
 import 'signup_buyer.dart';
@@ -42,10 +45,10 @@ class ChoiceAuthPage extends StatelessWidget {
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 70.0, bottom: 20.0, left: 20.0, right: 20.0),
-                        child: const Text(
-                          "The Algerian Commercial Network",
+                        child: Text(
+                          S.of(context).theAlgerianCommercialNetwork,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                           ),
                         ),
@@ -70,9 +73,9 @@ class ChoiceAuthPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
+                    child: Text(
+                      S.of(context).login,
+                      style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                       ),
@@ -162,9 +165,9 @@ class ChoiceAuthPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(
+                  child: Text(
+                    S.of(context).register,
+                    style: const TextStyle(
                       fontSize: 20,
                       color: Color(0xFF001A1A),
                     ),

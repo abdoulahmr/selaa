@@ -289,7 +289,7 @@ class _UserPage extends State<UserPage> {
       bottomNavigationBar:Container(
         decoration: const BoxDecoration(
             border: Border(
-              top: BorderSide(color: Colors.grey, width: 0.5), // Add top border
+              top: BorderSide(color: Colors.grey, width: 0.5),
             ),
           ),
         child: FloatingNavbar(

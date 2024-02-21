@@ -322,7 +322,7 @@ class _InProgressOrdersTabState extends State<InProgressOrdersTab> {
     return Scaffold(
       body: orders.isEmpty
           ? const Center(
-              child: Text('No pending orders'),
+              child: Text('No in progress orders'),
             )
           : ListView.builder(
           itemCount: orders.length,
@@ -397,7 +397,7 @@ class _CompletedOrdersTabState extends State<CompletedOrdersTab> {
     return Scaffold(
       body: orders.isEmpty
           ? const Center(
-              child: Text('No pending orders'),
+              child: Text('No completed orders'),
             )
           : ListView.builder(
           itemCount: orders.length,
