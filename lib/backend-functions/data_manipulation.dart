@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +9,7 @@ import 'package:selaa/buyer/my_orders.dart';
 import 'package:selaa/seller/user_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+
 
 // function to add a poste
 Future<void> addProduct(
@@ -179,7 +181,6 @@ Future<void> addItemToCart(
   }
 }
 
-
 // calculate total price
 Future<double> calculateTotalPrice(context) async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -282,12 +283,11 @@ Future<void> saveOrder(
         "productId": productID,
         "productName": productName,
         "sellerID": sellerID,
-        "buyerID": user.uid,
         "quantity": quantity,
         "unitPrice": unitPrice,
         "date": date,
         "location": location,
-        "status": "pending"
+        "status": "Pending"
       });
 
     // Save order for the seller
@@ -298,13 +298,12 @@ Future<void> saveOrder(
         "orderId": orderID,
         "productId": productID,
         "productName": productName,
-        "sellerID": sellerID,
         "buyerID": user.uid,
         "quantity": quantity,
         "unitPrice": unitPrice,
         "date": date,
         "location": location,
-        "status": "pending"
+        "status": "Pending"
       });
 
     deleteItemFromCart(productID, context);
@@ -352,5 +351,37 @@ Future<void> updateBalance(double orderAmount, context) async {
         content: Text('Error please send us a feedback  code: 27'),
       ),
     );
+  }
+}
+
+// add delivery
+Future<void> addDeliveryForOrder(BuildContext context, String orderId) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  String shippingAddress = await loadUserShippingAddress(context);
+  if (shippingAddress.isEmpty) {
+    Navigator.pushNamed(context, "/shippingAddress");
+  } else {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(user!.uid)
+          .collection("orders")
+          .where('orderId', isEqualTo: orderId)
+          .get();
+      for (QueryDocumentSnapshot doc in snapshot.docs) {
+        await doc.reference.update({"delivery": true});
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Delivery requested succesfuly'),
+      ),
+    );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error please send us a feedback  code: 50'),
+        ),
+      );
+    }
   }
 }

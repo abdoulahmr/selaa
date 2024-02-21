@@ -48,6 +48,9 @@ dependencies:
   dots_indicator: ^3.0.0
   floating_bottom_navigation_bar: ^1.5.2
   qr_flutter: ^4.1.0
+  firebase_messaging: ^14.7.10
+  qr_bar_code_scanner_dialog: ^0.0.5
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:

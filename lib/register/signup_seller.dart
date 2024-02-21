@@ -93,7 +93,7 @@ class _SignUpState extends State<SignUpSeller> {
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0A1747)),
+                        color: Color(0xFF415B5B)),
                   ),
                 ),
                 Container(
@@ -103,13 +103,13 @@ class _SignUpState extends State<SignUpSeller> {
                     decoration: InputDecoration(
                       labelText: 'First Name',
                       labelStyle: const TextStyle(
-                        color: Color(0xFF0A1747),
+                        color: Color(0xFF415B5B),
                       ),  
                       hintText: 'seller1',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0A1747)))),
+                        borderSide: BorderSide(color: Color(0xFF415B5B)))),
                   ),
                 ),
                 Container(
@@ -119,13 +119,13 @@ class _SignUpState extends State<SignUpSeller> {
                     decoration: InputDecoration(
                       labelText: 'Last Name',
                       labelStyle: const TextStyle(
-                        color: Color(0xFF0A1747),
+                        color: Color(0xFF415B5B),
                       ),  
                       hintText: 'seller1',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0A1747)))),
+                        borderSide: BorderSide(color: Color(0xFF415B5B)))),
                   ),
                 ),
                 Container(
@@ -136,13 +136,13 @@ class _SignUpState extends State<SignUpSeller> {
                     decoration: InputDecoration(
                       labelText: 'Email',
                       labelStyle: const TextStyle(
-                        color: Color(0xFF0A1747),
+                        color: Color(0xFF415B5B),
                       ),  
                       hintText: 'ex : selaa@examle.org',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0A1747)))),
+                        borderSide: BorderSide(color: Color(0xFF415B5B)))),
                   ),
                 ),
                 Container(
@@ -153,13 +153,13 @@ class _SignUpState extends State<SignUpSeller> {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: const TextStyle(
-                        color: Color(0xFF0A1747),
+                        color: Color(0xFF415B5B),
                       ),  
                       hintText: '********',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0A1747)))),
+                        borderSide: BorderSide(color: Color(0xFF415B5B)))),
                   ),
                 ),
                 Container(
@@ -170,13 +170,13 @@ class _SignUpState extends State<SignUpSeller> {
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
                       labelStyle: const TextStyle(
-                        color: Color(0xFF0A1747),
+                        color: Color(0xFF415B5B),
                       ),  
                       hintText: '********',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0)),
                       focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF0A1747)))),
+                        borderSide: BorderSide(color: Color(0xFF415B5B)))),
                   ),
                 ),
                  const SizedBox(
@@ -216,11 +216,11 @@ class _SignUpState extends State<SignUpSeller> {
                       Size(MediaQuery.of(context).size.width*0.85, MediaQuery.of(context).size.height*0.06),
                     ),
                     backgroundColor:
-                        MaterialStateProperty.all(const Color(0xFF0A1747)),
+                        MaterialStateProperty.all(const Color(0xFF415B5B)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        side: const BorderSide(color: Color(0xFF0A1747)),
+                        side: const BorderSide(color: Color(0xFF415B5B)),
                       ),
                     ),
                   ),
@@ -276,7 +276,7 @@ class _SignUpState extends State<SignUpSeller> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
-                        side: const BorderSide(color: Color(0xFF0A1747)),
+                        side: const BorderSide(color: Color(0xFF415B5B)),
                       ),
                     ),
                   ),
@@ -284,7 +284,7 @@ class _SignUpState extends State<SignUpSeller> {
                     "Register as a buyer",
                     style: TextStyle(
                       fontSize: 15,
-                      color: Color(0xFF0A1747),
+                      color: Color(0xFF415B5B),
                     ),
                   ),
                 ),
@@ -309,7 +309,7 @@ class _SignUpState extends State<SignUpSeller> {
                         " Login Now",
                         style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xFF66D6E4),
+                          color: Color(0xFFCCE6E6),
                         ),
                       ),
                     ),

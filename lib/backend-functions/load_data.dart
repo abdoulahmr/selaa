@@ -154,7 +154,6 @@ Future<List<Map<String, dynamic>>> loadUserPostes() async {
   return result;
 }
 
-
 // load poste information
 Future<List<Map<String, dynamic>>> loadPosteInfo(String productID, context) async {
   List<Map<String, dynamic>> result = [];
@@ -216,6 +215,7 @@ Future<List<Map<String, dynamic>>> loadAllPostes(context) async {
     return [];
   }
 }
+
 // get items from cart
 Future<List<Map<String, dynamic>>> loadCartItems(context) async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -366,7 +366,8 @@ Future<String> loadUserPhoneNumber(context) async {
   }
 }
 
-Future<List<Map<String, dynamic>>> loadUserOrders(context) async {
+// load buyer orders
+Future<List<Map<String, dynamic>>> loadBuyerOrders(context) async {
   try {
     User? user = FirebaseAuth.instance.currentUser;
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -393,24 +394,94 @@ Future<List<Map<String, dynamic>>> loadUserOrders(context) async {
         content: Text('Error please send us a feedback  code 48'),
       ),
     );
+    print(e);
     return []; 
   }
 }
 
-// load order items
-Future<List<Map<String, dynamic>>> loadOrderItems(context, orderId) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+// load seller orders
+Future<List<Map<String, dynamic>>> loadSellerOrders(context) async {
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('users')
       .doc(user!.uid)
       .collection('orders')
-      .where('orderId', isEqualTo: orderId) // Filter by orderId
       .get();
 
-  List<Map<String, dynamic>> orderItems = [];
-  for (var doc in querySnapshot.docs) {
-    orderItems.add(doc.data()as Map<String, dynamic>);
+    List<Map<String, dynamic>> orders = [];
+    for (var doc in querySnapshot.docs) {
+      Map<String, dynamic> orderData = {
+        'orderId': doc['orderId'],
+        'date': doc['date'],
+        'buyerID': doc['buyerID'],
+        'status': doc['status']
+      };
+      if (!orders.any((order) => order['orderId'] == doc['orderId'])) {
+        orders.add(orderData);
+      }
+    }
+    return orders;
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code 48'),
+      ),
+    );
+    print(e);
+    return []; 
   }
+}
 
-  return orderItems;
+// load order items  
+Future<List<Map<String, dynamic>>> loadOrderItems(context, orderId) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  try{
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user!.uid)
+      .collection('orders')
+      .where('orderId', isEqualTo: orderId)
+      .get();
+
+    List<Map<String, dynamic>> orderItems = [];
+    for (var doc in querySnapshot.docs) {
+      orderItems.add(doc.data()as Map<String, dynamic>);
+    }
+    return orderItems;
+  }catch(e){
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code 49'),
+      ),
+    );
+    return []; 
+  }
+}
+
+// load user name from uid
+Future<String> loadUserName(context, uid) async {
+  try {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid) 
+        .get();
+    if (documentSnapshot.exists) {
+      return documentSnapshot.data()!['firstname']+" "+documentSnapshot.data()!['lastname'];
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error please send us a feedback  code 50'),
+        ),
+      );
+      return 'User not found';
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code 51'),
+      ),
+    );
+    return 'Error getting user name';
+  }
 }

@@ -22,7 +22,7 @@ class ChoiceAuthPage extends StatelessWidget {
                   height: MediaQuery.of(context).size.height -
                       (MediaQuery.of(context).size.height * 0.3),
                   decoration: const BoxDecoration(
-                    color: Color(0xFF66D6E4),
+                    color: Color(0xFFCCE6E6),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(60.0),
                       bottomRight: Radius.circular(60.0),
@@ -63,7 +63,7 @@ class ChoiceAuthPage extends StatelessWidget {
                       fixedSize: MaterialStateProperty.all(
                         Size(MediaQuery.of(context).size.width*0.8, MediaQuery.of(context).size.height*0.07),
                       ),
-                      backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
+                      backgroundColor: MaterialStateProperty.all(const Color(0xFF415B5B)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -101,7 +101,7 @@ class ChoiceAuthPage extends StatelessWidget {
                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(  
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15.0),
-                                        side: const BorderSide(color: Color(0xFF0A1747)),
+                                        side: const BorderSide(color: Color(0xFF415B5B)),
                                       ),
                                     ),
                                   ),
@@ -112,7 +112,7 @@ class ChoiceAuthPage extends StatelessWidget {
                                     'Register as a Buyer',
                                     style: TextStyle(
                                       fontSize: 20,
-                                      color: Color(0xFF0A1747),
+                                      color: Color(0xFF415B5B),
                                     )
                                   )
                                 ),
@@ -127,7 +127,7 @@ class ChoiceAuthPage extends StatelessWidget {
                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(  
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15.0),
-                                        side: const BorderSide(color: Color(0xFF0A1747)),
+                                        side: const BorderSide(color: Color(0xFF415B5B)),
                                       ),
                                     ),
                                   ),
@@ -135,7 +135,7 @@ class ChoiceAuthPage extends StatelessWidget {
                                     'Register as a Seller',
                                     style: TextStyle(
                                       fontSize: 20,
-                                      color: Color(0xFF0A1747),
+                                      color: Color(0xFF415B5B),
                                     )
                                   ),
                                   onPressed: () {

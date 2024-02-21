@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/buyer/notification.dart';
 import 'package:selaa/seller/order.dart';
@@ -17,12 +16,13 @@ class _HomeState extends State<HomeSeller> {
   String profilePicture = '';
   List<int> orderStatus = [100,20,30,50];
   List<int> productStatus = [3,10];
+  int _currentIndex = 0;
   int balance = 1000;
   final List<Widget> _pages = [
     const HomeSeller(),
     const UserPage(),
     const NotificationPage(),
-    const OrderPage(),
+    const ListOrderPage(),
   ];
 
   List<Map<String, dynamic>> postes = [];
@@ -67,11 +67,11 @@ class _HomeState extends State<HomeSeller> {
                             MediaQuery.of(context).size.height * 0.05,
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFF415B5B)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
-                            side: const BorderSide(color: Color(0xFF0A1747)),
+                            side: const BorderSide(color: Color(0xFF415B5B)),
                           ),
                         ),
                       ),
@@ -108,7 +108,7 @@ class _HomeState extends State<HomeSeller> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.1,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF66D6E4),
+                  color: Color(0xFFCCE6E6),
                 ),
               ),
               const SizedBox(height: 10),
@@ -132,7 +132,7 @@ class _HomeState extends State<HomeSeller> {
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.15,
                     decoration: const BoxDecoration(
-                      color: Color(0xFF66D6E4),
+                      color: Color(0xFFCCE6E6),
                       borderRadius: BorderRadius.all(Radius.circular(30.0)),
                     ),
                     child: Column(
@@ -172,7 +172,7 @@ class _HomeState extends State<HomeSeller> {
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.15,
                     decoration: const BoxDecoration(
-                      color: Color(0xFF66D6E4),
+                      color: Color(0xFFCCE6E6),
                       borderRadius: BorderRadius.all(Radius.circular(30.0)),
                     ),
                     child: Column(
@@ -229,7 +229,7 @@ class _HomeState extends State<HomeSeller> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.height * 0.1,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF66D6E4),
+                            color: const Color(0xFFCCE6E6),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           child: Center(
@@ -261,7 +261,7 @@ class _HomeState extends State<HomeSeller> {
                           width: MediaQuery.of(context).size.width * 0.4,
                           height: MediaQuery.of(context).size.height * 0.1,
                           decoration: const BoxDecoration(
-                            color: Color(0xFF66D6E4),
+                            color: Color(0xFFCCE6E6),
                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Column(
@@ -325,7 +325,7 @@ class _HomeState extends State<HomeSeller> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.3,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF66D6E4),
+                  color: Color(0xFFCCE6E6),
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 ),
               )
@@ -333,27 +333,54 @@ class _HomeState extends State<HomeSeller> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.grey, width: 0.5), // Add top border
-            ),
-          ),
-        child: FloatingNavbar(
-          selectedItemColor: const Color(0xFF0A1747),
-          unselectedItemColor: const Color(0xFF66D6E4),
-          backgroundColor: Colors.white,
-          onTap: (int val) {
-            if(val != 0){
-              Navigator.push(context,MaterialPageRoute(builder: (context) => _pages[val]));
-            }
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: const Color(0xFFCCE6E6),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: const Color(0xFF008080),
+          unselectedItemColor: const Color(0xFF008080),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            // You can use Navigator to navigate to other screens
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => _pages[index]),
+            );
           },
-          currentIndex: 0,
-          items: [
-            FloatingNavbarItem(icon: Icons.home, title: 'Home'),
-            FloatingNavbarItem(icon: Icons.account_circle, title: 'Profile'),
-            FloatingNavbarItem(icon: Icons.notifications, title: 'Notifications'),
-            FloatingNavbarItem(icon: Icons.all_inbox, title: 'Orders'),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 30,
+              ),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_circle,
+                size: 30,
+              ),
+              label: "Profile",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.notifications_active,
+                size: 30,
+              ),
+              label: "Notification",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.sort,
+                size: 30,
+              ),
+              label: "Order",
+            ),
           ],
         ),
       ),

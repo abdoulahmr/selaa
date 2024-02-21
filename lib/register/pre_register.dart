@@ -49,8 +49,8 @@ class _PreRegisterPageState extends State<PreRegister> {
             dotsCount: 4,
             position: currentStep - 1,
             decorator: const DotsDecorator(
-              color: Color(0xFF66D6E4),
-              activeColor: Color(0xFF0A1747),
+              color: Color(0xFFCCE6E6),
+              activeColor: Color(0xFF415B5B),
             ),
           ),
           const SizedBox(
@@ -76,7 +76,7 @@ class _PreRegisterPageState extends State<PreRegister> {
               }
             },
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(const Color(0xFF66D6E4)),
+              backgroundColor: MaterialStateProperty.all(const Color(0xFFCCE6E6)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -88,12 +88,12 @@ class _PreRegisterPageState extends State<PreRegister> {
                   'Get Started',
                   style: TextStyle(
                     fontSize: 20,
-                    color: Color(0xFF0A1747),
+                    color: Color(0xFF415B5B),
                   ),
                 )
               : const Icon(
                   Icons.arrow_forward,
-                  color: Color(0xFF0A1747),
+                  color: Color(0xFF415B5B),
                 ),
           ),
           const SizedBox(

@@ -16,7 +16,7 @@ class _NotificationPageState extends State<NotificationPage> {
     const HomeSeller(),
     const UserPage(),
     const NotificationPage(),
-    const OrderPage(),
+    const ListOrderPage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
           ),
         child: FloatingNavbar(
-          selectedItemColor: const Color(0xFF0A1747),
-          unselectedItemColor: const Color(0xFF66D6E4),
+          selectedItemColor: const Color(0xFF415B5B),
+          unselectedItemColor: const Color(0xFFCCE6E6),
           backgroundColor: Colors.white,
           onTap: (int val) {
             if(val != 1){

@@ -22,7 +22,7 @@ class _UserPage extends State<UserPage> {
     const HomeSeller(),
     const UserPage(),
     const NotificationPage(),
-    const OrderPage(),
+    const ListOrderPage(),
   ];
 
   @override
@@ -50,7 +50,7 @@ class _UserPage extends State<UserPage> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  color: Color(0xFF66D6E4),
+                  color: Color(0xFFCCE6E6),
                 ),
                 child: Column(
                   children: [
@@ -156,11 +156,11 @@ class _UserPage extends State<UserPage> {
                             MediaQuery.of(context).size.height * 0.06,
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFF415B5B)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Color(0xFF0A1747)),
+                            side: const BorderSide(color: Color(0xFF415B5B)),
                           ),
                         ),
                       ),
@@ -184,11 +184,11 @@ class _UserPage extends State<UserPage> {
                             MediaQuery.of(context).size.height * 0.06,
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(const Color(0xFF0A1747)),
+                        backgroundColor: MaterialStateProperty.all(const Color(0xFF415B5B)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Color(0xFF0A1747)),
+                            side: const BorderSide(color: Color(0xFF415B5B)),
                           ),
                         ),
                       ),
@@ -225,7 +225,7 @@ class _UserPage extends State<UserPage> {
                               margin: const EdgeInsets.all(10),
                               padding: const EdgeInsets.all(20),
                               decoration: const BoxDecoration(
-                                color: Color(0xFF66D6E4),
+                                color: Color(0xFFCCE6E6),
                                 borderRadius: BorderRadius.all(Radius.circular(60.0)),
                               ),
                               width: MediaQuery.of(context).size.width*0.8,
@@ -293,8 +293,8 @@ class _UserPage extends State<UserPage> {
             ),
           ),
         child: FloatingNavbar(
-          selectedItemColor: const Color(0xFF0A1747),
-          unselectedItemColor: const Color(0xFF66D6E4),
+          selectedItemColor: const Color(0xFF415B5B),
+          unselectedItemColor: const Color(0xFFCCE6E6),
           backgroundColor: Colors.white,
           onTap: (int val) {
             if(val != 1){
