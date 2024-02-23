@@ -385,3 +385,12 @@ Future<void> addDeliveryForOrder(BuildContext context, String orderId) async {
     }
   }
 }
+
+// Function to calculate total price of an order
+Future<double> calculateOrderTotalPrice(List<Map<String, dynamic>> items, BuildContext context) async {
+  double total = 0;
+  for(int i = 0; i < items.length; i++){
+    total = total + (items[i]['unitPrice']*items[i]['quantity']);
+  }
+  return total;
+}

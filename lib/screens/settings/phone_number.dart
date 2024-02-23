@@ -43,8 +43,8 @@ class _AddPhoneNumberPageState extends State<AddPhoneNumberPage> {
             ),
         ],
       ),
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: Column(
           children: [
             const SizedBox(height: 50),

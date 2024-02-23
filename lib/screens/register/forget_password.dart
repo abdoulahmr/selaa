@@ -11,8 +11,8 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

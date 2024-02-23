@@ -37,10 +37,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      body: PopScope(
+        canPop: false,
         child: SingleChildScrollView(
           child: Column(
             children: [

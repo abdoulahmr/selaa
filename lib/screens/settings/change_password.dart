@@ -40,8 +40,8 @@ class ChangePasswordPage extends StatelessWidget {
         title: const Text('Update Password'),
         backgroundColor: const Color(0xFF008080),
       ),
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

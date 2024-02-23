@@ -21,11 +21,12 @@ class Main extends StatefulWidget {
   @override
   State<Main> createState() => _MainState();
 
-  static void setLocale(BuildContext context, Locale newLocale) {
-    _MainState? state = context.findAncestorStateOfType<_MainState>();
-    state?.setLocale(newLocale);
-  }
+  static final GlobalKey<_MainState> mainStateKey = GlobalKey<_MainState>();
 
+  static void setLocale(BuildContext context, Locale newLocale) {
+    final _MainState state = mainStateKey.currentState!;
+    state.setLocale(newLocale);
+  }
 }
 
 class _MainState extends State<Main> {
@@ -40,6 +41,7 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      key: Main.mainStateKey,
       localizationsDelegates: const[
         S.delegate,
         GlobalMaterialLocalizations.delegate,

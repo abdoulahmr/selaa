@@ -55,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "description": MessageLookupByLibrary.simpleMessage("Description"),
         "dontWorryItOccurs": MessageLookupByLibrary.simpleMessage(
             "Don\'t worry, it occurs. Please enter the email address linked with your account"),
+        "dzd": MessageLookupByLibrary.simpleMessage("DZD"),
         "editPhoneNumber": MessageLookupByLibrary.simpleMessage(
             "Press the edit button to change your phone number"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit profile"),

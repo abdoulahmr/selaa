@@ -10,8 +10,8 @@ class BuyerOptionsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[

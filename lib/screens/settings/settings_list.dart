@@ -13,8 +13,8 @@ class SettingsList extends StatelessWidget {
         title: const Text('Settings'),
         backgroundColor: const Color(0xFF008080),
       ),
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: Column(
           children: [
             GestureDetector(

@@ -4,6 +4,7 @@ import 'package:selaa/backend-functions/auth.dart';
 import 'package:selaa/screens/register/login.dart';
 import 'package:selaa/screens/register/pre_register.dart';
 import 'package:selaa/screens/register/signup_seller.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 class SignUpBuyer extends StatefulWidget {
   const SignUpBuyer({Key? key}) : super(key: key);
@@ -68,10 +69,8 @@ class _SignUpState extends State<SignUpBuyer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-            return false;
-        },
+      body: PopScope(
+        canPop: false,
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -259,6 +258,13 @@ class _SignUpState extends State<SignUpBuyer> {
                       color: Colors.black,
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SignInButton(
+                  Buttons.google,
+                  onPressed: () {},
                 ),
                 const SizedBox(
                   height: 10,

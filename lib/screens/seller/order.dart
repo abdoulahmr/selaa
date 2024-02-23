@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selaa/screens/buyer/notification.dart';
 import 'package:selaa/screens/register/redirect_login.dart';
+import 'package:selaa/screens/seller/order_overview.dart';
 import 'package:selaa/screens/seller/order_search.dart';
 import 'package:selaa/screens/seller/user_page.dart';
 import 'package:selaa/backend-functions/load_data.dart';
@@ -96,7 +97,6 @@ class _OrderPageState extends State<ListOrderPage> {
               setState(() {
                 _currentIndex = index;
               });
-              // You can use Navigator to navigate to other screens
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => _pages[index]),
@@ -182,6 +182,15 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
             children: [
               GestureDetector(
                 onTap: (){
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => SellerOrderOverview(
+                        orderId: orders[index]["orderId"],
+                        buyerId: orders[index]["buyerID"],
+                      )
+                    )
+                  );
                 },
                 child: FutureBuilder<String>(
                   future: loadUserName(context, orders[index]["buyerID"]),

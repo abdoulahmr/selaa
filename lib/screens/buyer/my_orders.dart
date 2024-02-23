@@ -7,11 +7,8 @@ class MyOrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context);
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -35,8 +32,8 @@ class MyOrdersPage extends StatelessWidget {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
               List<Map<String, dynamic>> orders = snapshot.data!;
-              return WillPopScope(
-                onWillPop: () async => false,
+              return PopScope(
+                canPop: false,
                 child: ListView.builder(
                   itemCount: orders.length,
                   itemBuilder: (context, index) {

@@ -1,6 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:selaa/backend-functions/links.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/screens/buyer/notification.dart';
+import 'package:selaa/screens/buyer/product_category_overview.dart';
+import 'package:selaa/screens/buyer/products_categorys.dart';
 import 'package:selaa/screens/seller/product_page.dart';
 import 'package:selaa/screens/buyer/shopping_cart.dart';
 import 'package:selaa/screens/seller/user_page.dart';
@@ -37,10 +41,8 @@ class _HomeState extends State<HomeBuyer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      body: PopScope(
+        canPop: false,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -69,7 +71,7 @@ class _HomeState extends State<HomeBuyer> {
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const BuyerOptionsMenu()));
                       },
-                      child: const Icon(Icons.menu),
+                      child: const Icon(Icons.menu,color: Colors.white,),
                     ),
                     const Image(
                       image: AssetImage(
@@ -87,7 +89,6 @@ class _HomeState extends State<HomeBuyer> {
                           color: Color(0xFF008080),
                           ),
                         onPressed: (){
-
                         },
                       )
                     ),
@@ -95,14 +96,32 @@ class _HomeState extends State<HomeBuyer> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(50),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.25,
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 199, 199, 199),
+                  color: Color(0xFFCCE6E6),
                 ),
-                child: const Center(
-                  child: Text("Advertisement")
+                child:  CarouselSlider(
+                  items: [
+                    Image(
+                      image: NetworkImage(ImagePaths().ad1),
+                    ),
+                    Image(
+                      image: NetworkImage(ImagePaths().ad2),
+                    ),
+                    Image(
+                      image: NetworkImage(ImagePaths().ad3),
+                    ),
+                  ],
+                  options: CarouselOptions(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                    viewportFraction: 0.8,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -155,7 +174,7 @@ class _HomeState extends State<HomeBuyer> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              print("Electronics");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductCategoryOverviewPage(categoryId: "ZlZfD5jmaypx4PJ5WKtr",)));
                             },
                             icon: const Icon(Icons.devices),
                               iconSize: 30,
@@ -173,7 +192,7 @@ class _HomeState extends State<HomeBuyer> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              print("Food");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductCategoryOverviewPage(categoryId: "l7lxIu6It9Xu1tSLfuQ4",)));
                             },
                             icon: const Icon(Icons.fastfood_outlined),
                             iconSize: 30,
@@ -191,7 +210,7 @@ class _HomeState extends State<HomeBuyer> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              print("Fashion");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductCategoryOverviewPage(categoryId: "Xdk6BS0tiQjCgCNEEORK",)));
                             },
                             icon: const Icon(Icons.checkroom),
                             iconSize: 30,
@@ -209,7 +228,7 @@ class _HomeState extends State<HomeBuyer> {
                         child: Center(
                           child: IconButton(
                             onPressed: () {
-                              print("Furniture");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductCategoryOverviewPage(categoryId: "xNrEZXO3xk8DTj04qKVw",)));
                             },
                             icon : const Icon(Icons.chair_outlined),
                             iconSize: 30,
@@ -223,7 +242,7 @@ class _HomeState extends State<HomeBuyer> {
                         child: Center(
                           child: InkWell(
                             onTap: () {
-                              
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductsCategorysPage()));
                             },
                             child: const Text(
                               "See More",

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -394,7 +396,6 @@ Future<List<Map<String, dynamic>>> loadBuyerOrders(context) async {
         content: Text('Error please send us a feedback  code 48'),
       ),
     );
-    print(e);
     return []; 
   }
 }
@@ -425,10 +426,9 @@ Future<List<Map<String, dynamic>>> loadSellerOrders(context) async {
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Error please send us a feedback  code 48'),
+        content: Text('Error please send us a feedback  code 52'),
       ),
     );
-    print(e);
     return []; 
   }
 }
@@ -483,5 +483,169 @@ Future<String> loadUserName(context, uid) async {
       ),
     );
     return 'Error getting user name';
+  }
+}
+
+// load buyer information
+Future<Map<String, dynamic>> loadBuyerInfo(BuildContext context, String buyerId) async {
+  try {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(buyerId)
+        .get();
+    return documentSnapshot.data() ?? {};
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback  code 53'),
+      ),
+    );
+    return {};
+  }
+}
+
+// load seller home page information
+//// load seller orders info
+Future<Map<String, dynamic>> loadSellerOrdersInfo(BuildContext context) async {
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    // Keep track of unique orderIds
+    Set<String> uniqueOrderIds = {};
+    // Count the number of pending, on the way, delivered, and canceled orders
+    QuerySnapshot<Map<String, dynamic>> ordersSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('orders')
+        .get();
+    
+    // Filter out duplicate orders with the same orderId
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> uniqueOrders = ordersSnapshot.docs.where((doc) {
+      if (uniqueOrderIds.contains(doc['orderId'])) {
+        return false;
+      } else {
+        uniqueOrderIds.add(doc['orderId']);
+        return true;
+      }
+    }).toList();
+
+    int pendingOrders = uniqueOrders.where((doc) => doc['status'] == 'Pending').length;
+    int onTheWayOrders = uniqueOrders.where((doc) => doc['status'] == 'In Progress').length;
+    int deliveredOrders = uniqueOrders.where((doc) => doc['status'] == 'Delivered').length;
+    int canceledOrders = uniqueOrders.where((doc) => doc['status'] == 'Canceled').length;
+    
+    return {
+      'pendingOrders': pendingOrders,
+      'onTheWayOrders': onTheWayOrders,
+      'deliveredOrders': deliveredOrders,
+      'canceledOrders': canceledOrders,
+    };
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback code 54'),
+      ),
+    );
+    return {};
+  }
+}
+
+//// load seller products info
+Future<Map<String, dynamic>> loadSellerProductsInfo(BuildContext context) async {
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    // Fetch seller products from Firestore
+    QuerySnapshot<Map<String, dynamic>> productsSnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('sellerID', isEqualTo: user!.uid)
+        .get();
+
+    // Keep track of unique categories
+    Set<String> uniqueCategories = {};
+    for (var doc in productsSnapshot.docs) {
+      uniqueCategories.add(doc['category']);
+    }
+
+    // Count the number of products and categories
+    int totalProducts = productsSnapshot.docs.length;
+    int totalCategories = uniqueCategories.length;
+
+    return {
+      'totalProducts': totalProducts,
+      'totalCategories': totalCategories,
+    };
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback code 55'),
+      ),
+    );
+    return {};
+  }
+}
+
+//// load seller balance
+Future<String> loadSellerBalanceInfo(BuildContext context) async {
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    // Fetch seller balance from Firestore
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get();
+
+    if (documentSnapshot.exists) {
+      return documentSnapshot.data()!['balance'].toString();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error please send us a feedback code 56'),
+        ),
+      );
+      return "0";
+    }
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback code 57'),
+      ),
+    );
+    return "0";
+  }
+}
+
+// load products categorys
+Future<List<Map<String, dynamic>>> loadProductsCategorys(context) async {
+  try {
+    // Fetch products categorys from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+        .collection('productCategory')
+        .get();
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback code 58'),
+      ),
+    );
+    return [];
+  }
+}
+
+// load products by category
+Future<List<Map<String, dynamic>>> loadProductsByCategory(String categoryID, context) async {
+  try {
+    // Fetch products from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where('category', isEqualTo: categoryID)
+        .get();
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Error please send us a feedback code 59'),
+      ),
+    );
+    return [];
   }
 }

@@ -32,8 +32,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
         title: const Text('Shipping Address'),
         backgroundColor: const Color(0xFF008080),
       ),
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Column(

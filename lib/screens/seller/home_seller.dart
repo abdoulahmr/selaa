@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:selaa/backend-functions/links.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/screens/buyer/notification.dart';
 import 'package:selaa/screens/seller/order.dart';
@@ -13,19 +15,18 @@ class HomeSeller extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeSeller> {
-  String profilePicture = '';
-  List<int> orderStatus = [100,20,30,50];
-  List<int> productStatus = [3,10];
+  String profilePicture = "";
+  Map<String, dynamic> ordersInfo = {};
+  Map<String, dynamic> productsInfo = {};
+  List<Map<String, dynamic>> ordersPreview = [];
+  String balanceInfo = "";
   int _currentIndex = 0;
-  int balance = 1000;
   final List<Widget> _pages = [
     const HomeSeller(),
     const UserPage(),
     const NotificationPage(),
     const ListOrderPage(),
   ];
-
-  List<Map<String, dynamic>> postes = [];
 
   @override
   void initState() {
@@ -35,10 +36,24 @@ class _HomeState extends State<HomeSeller> {
         profilePicture = data;
       });
     });
-    loadAllPostes(context).then(
-      (List<Map<String, dynamic>> data) {
+    loadSellerOrdersInfo(context).then((data){
       setState(() {
-        postes = data;
+        ordersInfo = data;
+      });
+    });
+    loadSellerProductsInfo(context).then((data){
+      setState(() {
+        productsInfo = data;
+      });
+    });
+    loadSellerBalanceInfo(context).then((data){
+      setState(() {
+        balanceInfo = data;
+      });
+    });
+    loadSellerOrders(context).then((List<Map<String, dynamic>> data) {
+      setState(() {
+        ordersPreview = data;
       });
     });
   }
@@ -46,10 +61,8 @@ class _HomeState extends State<HomeSeller> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
+      body: PopScope(
+        canPop: false,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -75,15 +88,16 @@ class _HomeState extends State<HomeSeller> {
                           ),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: (){          
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const OptionsMenu()));
                       },
-                      child: const Icon(Icons.menu),
-                    ),
-                    const Image(
-                      image: AssetImage(
-                        'assets/images/2-removebg-preview-removebg-preview.png',
+                      child: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
                       ),
+                    ),
+                    Image(
+                      image: AssetImage(ImagePaths().horizontalLogo),
                       width: 120,
                       height: 120,
                     ),
@@ -97,7 +111,7 @@ class _HomeState extends State<HomeSeller> {
                           radius: 25,
                           backgroundImage: profilePicture.isNotEmpty
                               ? NetworkImage(profilePicture)
-                              : const NetworkImage('https://firebasestorage.googleapis.com/v0/b/selaa-2ff93.appspot.com/o/profilePicture%2Fkisspng-computer-icons-download-avatar-5b3848b5343f86.741661901530415285214-removebg-preview%20(1).png?alt=media&token=0c01bbf5-f998-4ad9-af94-235ba6fd4ab5'),
+                              : NetworkImage(ImagePaths().defaultProfilePicture),
                         ),
                       ),
                     ),
@@ -109,6 +123,28 @@ class _HomeState extends State<HomeSeller> {
                 height: MediaQuery.of(context).size.height * 0.1,
                 decoration: const BoxDecoration(
                   color: Color(0xFFCCE6E6),
+                ),
+                child: CarouselSlider(
+                  items: [
+                    Image(
+                      image: NetworkImage(ImagePaths().ad1),
+                    ),
+                    Image(
+                      image: NetworkImage(ImagePaths().ad2),
+                    ),
+                    Image(
+                      image: NetworkImage(ImagePaths().ad3),
+                    ),
+                  ],
+                  options: CarouselOptions(
+                    height: 200.0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                    viewportFraction: 0.8,
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
@@ -144,13 +180,12 @@ class _HomeState extends State<HomeSeller> {
                           ),
                         ),
                         Text(
-                          orderStatus[0].toString(),
+                          ordersInfo['pendingOrders'].toString(),
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 10),
                         const Text(
                           "On the way:",
                           style: TextStyle(
@@ -158,7 +193,7 @@ class _HomeState extends State<HomeSeller> {
                           ),
                         ),
                         Text(
-                          orderStatus[1].toString(),
+                          ordersInfo['onTheWayOrders'].toString(),
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -184,13 +219,12 @@ class _HomeState extends State<HomeSeller> {
                           ),
                         ),
                         Text(
-                          orderStatus[2].toString(),
+                          ordersInfo['deliveredOrders'].toString(),
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 10),
                         const Text(
                           "Canceld:",
                           style: TextStyle(
@@ -198,7 +232,7 @@ class _HomeState extends State<HomeSeller> {
                           ),
                         ),
                         Text(
-                          orderStatus[3].toString(),
+                          ordersInfo['canceledOrders'].toString(),
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -234,7 +268,7 @@ class _HomeState extends State<HomeSeller> {
                           ),
                           child: Center(
                             child: Text(
-                              "${balance.toString()} DZD",
+                              "$balanceInfo DZD",
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -275,7 +309,7 @@ class _HomeState extends State<HomeSeller> {
                                     ),
                                   ),
                                   Text(
-                                    productStatus[0].toString(),
+                                    productsInfo['totalProducts'].toString(),
                                     style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -292,7 +326,7 @@ class _HomeState extends State<HomeSeller> {
                                     ),
                                   ),
                                   Text(
-                                    productStatus[1].toString(),
+                                    productsInfo['totalCategories'].toString(),
                                     style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -328,7 +362,38 @@ class _HomeState extends State<HomeSeller> {
                   color: Color(0xFFCCE6E6),
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 ),
-              )
+                child: ordersPreview.isEmpty
+                  ? const Center(child: Text('No recent orders'))
+                  : ListView.builder(
+                  itemCount: ordersPreview.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return FutureBuilder<String>(
+                      future: loadUserName(context, ordersPreview[index]["buyerID"]),
+                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          if (snapshot.hasError) {
+                            return const Text('Error loading user name');
+                          } else {
+                            return ListTile(
+                              title: Text(snapshot.data ?? 'Unknown'),
+                              subtitle: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(ordersPreview[index]["status"]),
+                                  Text(ordersPreview[index]["date"])
+                                ],
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
             ],            
           ),
         ),
@@ -343,6 +408,7 @@ class _HomeState extends State<HomeSeller> {
           selectedItemColor: const Color(0xFF008080),
           unselectedItemColor: const Color(0xFF008080),
           onTap: (index) {
+            
             setState(() {
               _currentIndex = index;
             });

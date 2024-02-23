@@ -1,4 +1,3 @@
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:selaa/backend-functions/load_data.dart';
 import 'package:selaa/screens/seller/add_poste.dart';
@@ -18,6 +17,7 @@ class UserPage extends StatefulWidget {
 class _UserPage extends State<UserPage> {
   List<Map<String, dynamic>> userInfo = [];
   List<Map<String, dynamic>> userPostes = [];
+  int _currentIndex = 1;
   final List<Widget> _pages = [
     const HomeSeller(),
     const UserPage(),
@@ -43,8 +43,8 @@ class _UserPage extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: ()async{return false;},
+      body: PopScope(
+        canPop: false,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -152,7 +152,7 @@ class _UserPage extends State<UserPage> {
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(
                           Size(
-                            MediaQuery.of(context).size.width * 0.35,
+                            MediaQuery.of(context).size.width * 0.36,
                             MediaQuery.of(context).size.height * 0.06,
                           ),
                         ),
@@ -170,9 +170,9 @@ class _UserPage extends State<UserPage> {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.add),
+                          Icon(Icons.add,color: Colors.white),
                           SizedBox(width: 10),
-                          Text('Add'),
+                          Text('Add',style: TextStyle(color: Colors.white)),
                         ],
                       ),
                     ),
@@ -180,7 +180,7 @@ class _UserPage extends State<UserPage> {
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(
                           Size(
-                            MediaQuery.of(context).size.width * 0.35,
+                            MediaQuery.of(context).size.width * 0.39,
                             MediaQuery.of(context).size.height * 0.06,
                           ),
                         ),
@@ -197,9 +197,9 @@ class _UserPage extends State<UserPage> {
                       }, 
                       child: const Row(
                         children: [
-                          Icon(Icons.edit_square),
+                          Icon(Icons.edit_square,color: Colors.white),
                           SizedBox(width: 10),
-                          Text('Edit profile'),
+                          Text('Edit profile',style: TextStyle(color: Colors.white)),
                         ],
                       ),
                     )
@@ -212,9 +212,15 @@ class _UserPage extends State<UserPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (userPostes.isNotEmpty)
-                      ListView.builder(
+                      GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.7),
+                        ),
                         itemCount: userPostes.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -222,23 +228,23 @@ class _UserPage extends State<UserPage> {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(productID: userPostes[index]['productID'])));
                             },
                             child: Container(
-                              margin: const EdgeInsets.all(10),
-                              padding: const EdgeInsets.all(20),
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(10),
                               decoration: const BoxDecoration(
                                 color: Color(0xFFCCE6E6),
-                                borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                                borderRadius: BorderRadius.all(Radius.circular(30.0)),
                               ),
-                              width: MediaQuery.of(context).size.width*0.8,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   ClipRRect(
                                     borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(45.0),
-                                      topRight: Radius.circular(45.0),
+                                      topLeft: Radius.circular(25.0),
+                                      topRight: Radius.circular(25.0),
                                     ),
                                     child: Image.network(
                                       userPostes[index]['imageUrls']?[0]?? 'fallback_url',
-                                      height: MediaQuery.of(context).size.height * 0.3,
+                                      height: MediaQuery.of(context).size.height * 0.1,
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
                                     ),
@@ -248,8 +254,9 @@ class _UserPage extends State<UserPage> {
                                     userPostes[index]['title'],
                                     textAlign: TextAlign.left,                                
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -259,7 +266,7 @@ class _UserPage extends State<UserPage> {
                                         userPostes[index]['categoryName'],
                                         textAlign: TextAlign.left,
                                         style: const TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ],
@@ -268,7 +275,7 @@ class _UserPage extends State<UserPage> {
                                   Text(
                                     "${userPostes[index]['price']} DZD",
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
@@ -286,30 +293,56 @@ class _UserPage extends State<UserPage> {
           ),
         ),
       ),
-      bottomNavigationBar:Container(
-        decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.grey, width: 0.5),
-            ),
-          ),
-        child: FloatingNavbar(
-          selectedItemColor: const Color(0xFF415B5B),
-          unselectedItemColor: const Color(0xFFCCE6E6),
-          backgroundColor: Colors.white,
-          onTap: (int val) {
-            if(val != 1){
-              Navigator.push(context,MaterialPageRoute(builder: (context) => _pages[val]));
-            }
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: const Color(0xFFCCE6E6),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: const Color(0xFF008080),
+          unselectedItemColor: const Color(0xFF008080),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => _pages[index]),
+            );
           },
-          currentIndex: 1,
-          items: [
-            FloatingNavbarItem(icon: Icons.home, title: 'Home'),
-            FloatingNavbarItem(icon: Icons.account_circle, title: 'Profile'),
-            FloatingNavbarItem(icon: Icons.notifications, title: 'Notifications'),
-            FloatingNavbarItem(icon: Icons.all_inbox, title: 'Orders'),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 30,
+              ),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_circle,
+                size: 30,
+              ),
+              label: "Profile",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.notifications_active,
+                size: 30,
+              ),
+              label: "Notification",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.sort,
+                size: 30,
+              ),
+              label: "Order",
+            ),
           ],
         ),
-      ),
+      )
     );
   }
 }
